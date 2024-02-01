@@ -52,6 +52,4 @@ abstract class MatrixGenerator<out T : Movement>(
     fun getVerifiedMatrix(): List<List<ClockData>> {
         return verifyIntegrityAndReturn(generateMatrix())
     }
-
-
 }

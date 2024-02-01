@@ -11,12 +11,16 @@ import java.util.*
 /**
  * Dynamic animation can't be supported until this fixed -> https://issuetracker.google.com/issues/183220315
  */
-const val DEFAULT_ANIMATION_DURATION = 4000
+const val DEFAULT_ANIMATION_DURATION = 5000
 
 
 sealed class Movement(
-    val durationInMillis: Int,
+    open val durationInMillis: Int,
 ) {
+
+    open fun getDelayMillisNextUpdate(): Int {
+        return 0
+    }
 
     abstract fun getMatrixGenerator(): MatrixGenerator<Movement>
 
@@ -70,10 +74,18 @@ sealed class Movement(
      * To show time
      */
     data class Time(
-        val date: Date = Date(),
-    ) : Movement(durationInMillis = DEFAULT_ANIMATION_DURATION) {
+        val date: Date = Date()
+    ) : Movement(DEFAULT_ANIMATION_DURATION) {
+
         override fun getMatrixGenerator(): MatrixGenerator<Time> {
             return TimeMatrixGenerator(this)
+        }
+
+        override fun getDelayMillisNextUpdate(): Int {
+            val now = Calendar.getInstance()
+            now.time = date
+            val currentSeconds = now.get(Calendar.SECOND)
+            return (60 - currentSeconds) * 1000
         }
     }
 

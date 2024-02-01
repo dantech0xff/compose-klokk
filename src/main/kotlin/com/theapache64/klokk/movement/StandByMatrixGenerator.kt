@@ -10,7 +10,7 @@ import com.theapache64.klokk.movement.core.Movement
  * All clocks will be in sleep position
  */
 
-const val DEFAULT_STAND_BY_DEGREE = 225f
+const val DEFAULT_STAND_BY_DEGREE = 0f
 
 val globalStandByClockData by lazy {
     ClockData(
@@ -32,7 +32,7 @@ class StandByMatrixGenerator(data: Movement.StandBy) : MatrixGenerator<Movement.
                 repeat(ROWS) {
                     val list = mutableListOf<ClockData>()
                     repeat(COLUMNS) {
-                        list.add(globalStandByClockData)
+                        list.add(globalStandByClockData.copy())
                     }
                     add(list)
                 }

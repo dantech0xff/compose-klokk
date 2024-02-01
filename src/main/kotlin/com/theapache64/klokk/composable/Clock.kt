@@ -1,14 +1,15 @@
 package com.theapache64.klokk.composable
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -16,43 +17,80 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import com.theapache64.klokk.model.ClockData
+import com.theapache64.klokk.model.ClockAnimationType
 import com.theapache64.klokk.theme.CodGray
+import kotlinx.coroutines.launch
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.random.Random
 
 
 private val NEEDLE_COLOR = Color.White
 val CLOCK_BACKGROUND = CodGray
 
+
 @Composable
 fun Clock(
-    needleOneDegree: Float = 270f,
-    needleTwoDegree: Float = 0f,
-    durationInMillis: Int = 500,
-    delay: Int = 0,
-    easing: Easing = LinearEasing,
-    modifier: Modifier = Modifier,
-) {
+    clockData: ClockData,
+    easing: Easing = LinearEasing, modifier: Modifier = Modifier) {
 
-    val needleOneRadian = (needleOneDegree * Math.PI / 180).toFloat()
-    val needleTwoRadian = (needleTwoDegree * Math.PI / 180).toFloat()
-    val animationSpec = tween<Float>(durationMillis = durationInMillis, easing = easing, delayMillis = delay)
+    var timeSign by remember { mutableStateOf(clockData.timeSign) }
+    var needleOneDegree by remember { mutableStateOf(clockData.degreeOne) }
+    var needleTwoDegree by remember { mutableStateOf(clockData.degreeTwo) }
+    var durationInMillis by remember { mutableStateOf(clockData.animationDurationInMillis) }
 
-    val needleOneDegreeAnim by animateFloatAsState(
-        needleOneRadian,
-        animationSpec = animationSpec
-    )
+    val animatableRadiantNeedleOne = remember { Animatable(0f) }
+    val animatableRadianNeedleTwo = remember { Animatable(0f) }
 
-    val needleTwoDegreeAnim by animateFloatAsState(
-        needleTwoRadian,
-        animationSpec = animationSpec,
-    )
+    needleOneDegree = clockData.degreeOne
+    needleTwoDegree = clockData.degreeTwo
+    durationInMillis = clockData.animationDurationInMillis
+    timeSign = clockData.timeSign
 
-    Canvas(
-        modifier = modifier
-    ) {
+    val flashBackAnimationTime = 1000
+
+    LaunchedEffect(timeSign) {
+        launch {
+            if (clockData.clockAnimationType == ClockAnimationType.RESET_BEFORE_NEXT_TIME.value) {
+                animatableRadiantNeedleOne.animateTo(
+                    0.0f,
+                    animationSpec = tween(
+                        easing = easing,
+                        durationMillis = flashBackAnimationTime
+                    )
+                )
+                durationInMillis = clockData.animationDurationInMillis - flashBackAnimationTime
+            }
+            val needleOneRadian = (needleOneDegree * Math.PI / 180).toFloat()
+            animatableRadiantNeedleOne.animateTo(
+                needleOneRadian,
+                animationSpec = tween(durationMillis = durationInMillis, easing = easing)
+            )
+        }
+
+        launch {
+            if (clockData.clockAnimationType == ClockAnimationType.RESET_BEFORE_NEXT_TIME.value) {
+                animatableRadianNeedleTwo.animateTo(
+                    0.0f,
+                    animationSpec = tween(
+                        easing = easing,
+                        durationMillis = flashBackAnimationTime
+                    )
+                )
+                durationInMillis = clockData.animationDurationInMillis - flashBackAnimationTime
+            }
+            val needleTwoRadian = (needleTwoDegree * Math.PI / 180).toFloat()
+            animatableRadianNeedleTwo.animateTo(
+                needleTwoRadian,
+                animationSpec = tween(durationMillis = durationInMillis, easing = easing)
+            )
+        }
+    }
+
+    Canvas(modifier = modifier) {
 
         val needleWidth = size.minDimension * 0.05f
 
@@ -64,13 +102,7 @@ fun Clock(
             radius = radius
         )
 
-        // To make the needle origin rounded.
-        drawCircle(
-            color = NEEDLE_COLOR,
-            radius = needleWidth * 0.487f
-        )
-
-        val radius2 = radius - 4
+        val radius2 = (radius - needleWidth / 2f) * 0.98f
 
         // Needle One
         drawLine(
@@ -78,10 +110,11 @@ fun Clock(
             start = center,
             end = Offset(
                 // Finding end coordinate for the given radian
-                x = center.x + radius2 * sin(needleOneDegreeAnim),
-                y = center.y - radius2 * cos(needleOneDegreeAnim),
+                x = center.x + radius2 * sin(animatableRadiantNeedleOne.value),
+                y = center.y - radius2 * cos(animatableRadiantNeedleOne.value),
             ),
-            strokeWidth = needleWidth
+            strokeWidth = needleWidth,
+            cap = StrokeCap.Round
         )
 
 
@@ -91,46 +124,38 @@ fun Clock(
             start = center,
             end = Offset(
                 // Finding end coordinate for the given degree
-                x = center.x + radius2 * sin(needleTwoDegreeAnim),
-                y = center.y - radius2 * cos(needleTwoDegreeAnim),
+                x = center.x + radius2 * sin(animatableRadianNeedleTwo.value),
+                y = center.y - radius2 * cos(animatableRadianNeedleTwo.value),
             ),
-            strokeWidth = needleWidth
+            strokeWidth = needleWidth,
+            cap = StrokeCap.Round
         )
     }
-
 }
 
 
 // Preview
 fun main(args: Array<String>) {
     Window {
-        var needleOneDegree by remember { mutableStateOf(135f) }
-        var needleTwoDegree by remember { mutableStateOf(225f) }
+        var needleOneDegree by remember { mutableStateOf(Random.nextFloat() * 360) }
+        var needleTwoDegree by remember { mutableStateOf(Random.nextFloat() * 360) }
 
-
-        val scope = rememberCoroutineScope()
-
-        Box(
-            modifier = Modifier.fillMaxSize().background(Color.Black)
-        ) {
+        Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
 
             Clock(
-                needleOneDegree = needleOneDegree,
-                needleTwoDegree = needleTwoDegree,
-                modifier = Modifier.size(600.dp),
-                durationInMillis = 2000
+                ClockData(
+                    degreeOne = needleOneDegree,
+                    degreeTwo = needleTwoDegree,
+                    animationDurationInMillis = 500,
+                    clockAnimationType = ClockAnimationType.RESET_BEFORE_NEXT_TIME.value
+                ),
+                modifier = Modifier.size(300.dp).padding(50.dp)
             )
 
             Button(
                 onClick = {
-                    needleOneDegree = 110f
-                    needleTwoDegree = 170f
-
-                    /* scope.launch {
-                         delay(5000)
-                         needleOneDegree = (0..360).random().toFloat()
-                         needleTwoDegree = (0..360).random().toFloat()
-                     }*/
+                    needleOneDegree = Random.nextFloat() * 360
+                    needleTwoDegree = Random.nextFloat() * 360
                 }
             ) {
                 Text(text = "Animate")
