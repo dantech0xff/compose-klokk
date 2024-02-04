@@ -30,6 +30,15 @@ fun App() {
             activeMovement = movementTime
             delay(Movement.Time.MILLIS_PER_SECOND)
         }
+
+//        val now = Calendar.getInstance()
+//        val date = now.time
+//
+//        while (true) {
+//            val movementCountTime = Movement.CountTime(Movement.CountTime.MILLIS_PER_SECOND.toInt(), date)
+//            activeMovement = movementCountTime
+//            delay(Movement.CountTime.MILLIS_PER_SECOND)
+//        }
     }
 
     Column(
