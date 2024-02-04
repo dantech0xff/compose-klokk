@@ -18,10 +18,6 @@ sealed class Movement(
     open val durationInMillis: Int,
 ) {
 
-    open fun getDelayMillisNextUpdate(): Int {
-        return 0
-    }
-
     abstract fun getMatrixGenerator(): MatrixGenerator<Movement>
 
     /**
@@ -75,17 +71,14 @@ sealed class Movement(
      */
     data class Time(
         val date: Date = Date()
-    ) : Movement(DEFAULT_ANIMATION_DURATION) {
+    ) : Movement(MILLIS_PER_SECOND.toInt()) {
+
+        companion object {
+            const val MILLIS_PER_SECOND = 1000L
+        }
 
         override fun getMatrixGenerator(): MatrixGenerator<Time> {
             return TimeMatrixGenerator(this)
-        }
-
-        override fun getDelayMillisNextUpdate(): Int {
-            val now = Calendar.getInstance()
-            now.time = date
-            val currentSeconds = now.get(Calendar.SECOND)
-            return (60 - currentSeconds) * 1000
         }
     }
 

@@ -50,20 +50,8 @@ fun Clock(
     durationInMillis = clockData.animationDurationInMillis
     timeSign = clockData.timeSign
 
-    val flashBackAnimationTime = 1000
-
     LaunchedEffect(timeSign) {
         launch {
-            if (clockData.clockAnimationType == ClockAnimationType.RESET_BEFORE_NEXT_TIME.value) {
-                animatableRadiantNeedleOne.animateTo(
-                    0.0f,
-                    animationSpec = tween(
-                        easing = easing,
-                        durationMillis = flashBackAnimationTime
-                    )
-                )
-                durationInMillis = clockData.animationDurationInMillis - flashBackAnimationTime
-            }
             val needleOneRadian = (needleOneDegree * Math.PI / 180).toFloat()
             animatableRadiantNeedleOne.animateTo(
                 needleOneRadian,
@@ -72,16 +60,6 @@ fun Clock(
         }
 
         launch {
-            if (clockData.clockAnimationType == ClockAnimationType.RESET_BEFORE_NEXT_TIME.value) {
-                animatableRadianNeedleTwo.animateTo(
-                    0.0f,
-                    animationSpec = tween(
-                        easing = easing,
-                        durationMillis = flashBackAnimationTime
-                    )
-                )
-                durationInMillis = clockData.animationDurationInMillis - flashBackAnimationTime
-            }
             val needleTwoRadian = (needleTwoDegree * Math.PI / 180).toFloat()
             animatableRadianNeedleTwo.animateTo(
                 needleTwoRadian,

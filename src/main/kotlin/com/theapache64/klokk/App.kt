@@ -28,9 +28,7 @@ fun App() {
             val date = now.time
             val movementTime = Movement.Time(date)
             activeMovement = movementTime
-            val remainingMilliSeconds = movementTime.getDelayMillisNextUpdate()
-            println("Remaining milli seconds : $remainingMilliSeconds")
-            delay(remainingMilliSeconds.toLong())
+            delay(Movement.Time.MILLIS_PER_SECOND)
         }
     }
 

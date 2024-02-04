@@ -43,11 +43,12 @@ class TimeMatrixGenerator(data: Movement.Time) : MatrixGenerator<Movement.Time>(
 
         private fun mapMatrixClockData(
             matrix: List<List<ClockData?>>,
+            time: Movement.Time
         ): List<List<ClockData?>> {
             return matrix.map { clockList ->
                 clockList.map { clockItem ->
                     clockItem?.copy(
-                        animationDurationInMillis = 1000,
+                        animationDurationInMillis = time.durationInMillis,
                     )
                 }
             }
@@ -80,15 +81,17 @@ class TimeMatrixGenerator(data: Movement.Time) : MatrixGenerator<Movement.Time>(
         val m1Matrix = getMatrixFor(timeSplit[2])
         val m2Matrix = getMatrixFor(timeSplit[3])
 
+        val seconds = time.date.seconds.coerceAtLeast(0).coerceAtMost(60)
+
         return mutableListOf<List<ClockData>>().apply {
             val fullMatrix = StandByMatrixGenerator(Movement.StandBy)
                 .getVerifiedMatrix()
                 .map {
                     it.toMutableList().map { clockItem ->
                         clockItem.copy(
-                            animationDurationInMillis = time.getDelayMillisNextUpdate(),
-                            degreeOne = 360f,
-                            degreeTwo = 360f,
+                            animationDurationInMillis = time.durationInMillis,
+                            degreeOne = 360f * seconds / 60f,
+                            degreeTwo = 360f * seconds / 60f,
                             clockAnimationType = ClockAnimationType.RESET_BEFORE_NEXT_TIME.value,
                             timeSign = time.date.time
                         )
@@ -97,13 +100,13 @@ class TimeMatrixGenerator(data: Movement.Time) : MatrixGenerator<Movement.Time>(
                 .toMutableList()
 
             // First hour
-            replace(fullMatrix, mapMatrixClockData(h1Matrix), h1Position)
+            replace(fullMatrix, mapMatrixClockData(h1Matrix, time), h1Position)
 
-            replace(fullMatrix, mapMatrixClockData(h2Matrix), h2Position)
+            replace(fullMatrix, mapMatrixClockData(h2Matrix, time), h2Position)
 
-            replace(fullMatrix, mapMatrixClockData(m1Matrix), m1Position)
+            replace(fullMatrix, mapMatrixClockData(m1Matrix, time), m1Position)
 
-            replace(fullMatrix, mapMatrixClockData(m2Matrix), m2Position)
+            replace(fullMatrix, mapMatrixClockData(m2Matrix, time), m2Position)
 
             // Finally add to list
             addAll(fullMatrix)
