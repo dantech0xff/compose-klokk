@@ -30,7 +30,6 @@ const val CLOCKS_CONTAINER_WIDTH = CLOCK_SIZE * COLUMNS
 const val CLOCKS_CONTAINER_HEIGHT = CLOCK_SIZE * ROWS
 const val IS_DEBUG = true
 
-@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalFoundationApi
 fun main() = application {
     Window(

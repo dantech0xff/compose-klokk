@@ -4,25 +4,31 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.desktop.Window
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
-import com.theapache64.klokk.model.ClockData
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
+import com.theapache64.klokk.CLOCKS_CONTAINER_HEIGHT
+import com.theapache64.klokk.CLOCKS_CONTAINER_WIDTH
+import com.theapache64.klokk.PADDING
 import com.theapache64.klokk.model.ClockAnimationType
+import com.theapache64.klokk.model.ClockData
+import com.theapache64.klokk.movement.core.Movement
 import com.theapache64.klokk.theme.CodGray
 import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
@@ -112,14 +118,25 @@ fun Clock(
 }
 
 
-// Preview
-fun main(args: Array<String>) {
-    Window {
+@ExperimentalFoundationApi
+fun main() = application {
+    Window(
+        onCloseRequest = ::exitApplication,
+        title = "Kinetic Wall Clock Test",
+        state = rememberWindowState(
+            width = 500.dp,
+            height = 500.dp
+        ),
+        resizable = false
+    ) {
         var needleOneDegree by remember { mutableStateOf(Random.nextFloat() * 360) }
         var needleTwoDegree by remember { mutableStateOf(Random.nextFloat() * 360) }
 
-        Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
-
+        Column(
+            modifier = Modifier.fillMaxSize().background(Color.Black),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Clock(
                 ClockData(
                     degreeOne = needleOneDegree,
