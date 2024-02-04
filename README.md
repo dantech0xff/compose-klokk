@@ -1,3 +1,5 @@
+# A fork from Klokk of theapache64, customized by Dan Tech
+
 # 🕒 klokk
 
 ![buildStatus](https://img.shields.io/github/workflow/status/theapache64/kinetic-wall-clock/Java%20CI%20with%20Gradle?style=plastic)
@@ -7,18 +9,11 @@
 </a>
 
 
-![](screenshot.png)
-
-
 > A kinetic wall clock, built using Compose Desktop.
 
 ## 🔮 Demo
 
-![](demo.gif)
-
-- [Watch](https://youtu.be/ECNfa3L4U6s) full demo
-- [Watch](https://www.youtube.com/watch?v=lTsZOs_PkbM) Development - Behind the Scenes - Part 1
-- [Watch](https://www.youtube.com/watch?v=ejp9850FWy8) Development - Behind the Scenes - Part 2
+![](demo.webp)
 
 ## 🏃 Run
 
