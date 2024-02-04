@@ -7,7 +7,7 @@ import com.theapache64.klokk.movement.core.MatrixGenerator
 import com.theapache64.klokk.movement.core.Movement
 import java.util.*
 
-class CountTimeMatrixGenerator(countTime: Movement.CountTime) : MatrixGenerator<Movement.CountTime>(countTime) {
+class CountTimeTickerMatrixGenerator(countTimeTicker: Movement.CountTimeTicker) : MatrixGenerator<Movement.CountTimeTicker>(countTimeTicker) {
     companion object {
 
         private const val DIGIT_COLUMNS = 3
@@ -38,7 +38,7 @@ class CountTimeMatrixGenerator(countTime: Movement.CountTime) : MatrixGenerator<
 
         private fun mapMatrixClockData(
             matrix: List<List<ClockData?>>,
-            time: Movement.CountTime
+            time: Movement.CountTimeTicker
         ): List<List<ClockData?>> {
             return matrix.map { clockList ->
                 clockList.map { clockItem ->
@@ -64,7 +64,7 @@ class CountTimeMatrixGenerator(countTime: Movement.CountTime) : MatrixGenerator<
 
     }
 
-    private fun getTimeMatrix(time: Movement.CountTime): List<List<ClockData>> {
+    private fun getTimeMatrix(time: Movement.CountTimeTicker): List<List<ClockData>> {
 
         val diff = (Calendar.getInstance().timeInMillis - time.startTime.time).coerceAtLeast(0)
         val h: Int = (diff / (1000 * 60 * 60)).toInt()

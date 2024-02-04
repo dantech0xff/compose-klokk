@@ -5,7 +5,7 @@ import com.theapache64.klokk.movement.TranceMatrixGenerator
 import com.theapache64.klokk.movement.alphabet.TextMatrixGenerator
 import com.theapache64.klokk.movement.ripple.RippleMatrixGenerator
 import com.theapache64.klokk.movement.snake.WaveMatrixGenerator
-import com.theapache64.klokk.movement.time.CountTimeMatrixGenerator
+import com.theapache64.klokk.movement.time.CountTimeTickerMatrixGenerator
 import com.theapache64.klokk.movement.time.TimeMatrixGenerator
 import java.util.*
 
@@ -83,7 +83,7 @@ sealed class Movement(
         }
     }
 
-    data class CountTime(
+    data class CountTimeTicker(
         override val durationInMillis: Int,
         val startTime: Date = Calendar.getInstance().time,
         val sign: String = UUID.randomUUID().toString()
@@ -93,8 +93,8 @@ sealed class Movement(
             const val MILLIS_PER_SECOND = 1000L
         }
 
-        override fun getMatrixGenerator(): MatrixGenerator<CountTime> {
-            return CountTimeMatrixGenerator(this)
+        override fun getMatrixGenerator(): MatrixGenerator<CountTimeTicker> {
+            return CountTimeTickerMatrixGenerator(this)
         }
     }
 
