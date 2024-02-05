@@ -33,25 +33,27 @@ fun App() {
     var currentTime by remember { mutableStateOf(Calendar.getInstance().time) }
 
     // The animation loop
-    LaunchedEffect(clockMode) {
-        while (clockMode == ClockMode.TIME.value) {
-            currentTime = Calendar.getInstance().time
+    LaunchedEffect(Unit) {
+        while (true) {
+            while (clockMode == ClockMode.TIME.value) {
+                currentTime = Calendar.getInstance().time
 
-            val now = Calendar.getInstance()
-            val date = now.time
-            val movementTime = Movement.Time(date)
-            activeMovement = movementTime
-            delay(Movement.Time.MILLIS_PER_SECOND)
-        }
+                val now = Calendar.getInstance()
+                val date = now.time
+                val movementTime = Movement.Time(date)
+                activeMovement = movementTime
+                delay(Movement.Time.MILLIS_PER_SECOND)
+            }
 
-        val date = Calendar.getInstance().time
-        while (clockMode == ClockMode.COUNT_TIME_TICKER.value) {
-            currentTime = Calendar.getInstance().time
+            val date = Calendar.getInstance().time
+            while (clockMode == ClockMode.COUNT_TIME_TICKER.value) {
+                currentTime = Calendar.getInstance().time
 
-            val movementCountTime =
-                Movement.CountTimeTicker(Movement.CountTimeTicker.MILLIS_PER_SECOND.toInt(), date)
-            activeMovement = movementCountTime
-            delay(Movement.CountTimeTicker.MILLIS_PER_SECOND)
+                val movementCountTime =
+                    Movement.CountTimeTicker(Movement.CountTimeTicker.MILLIS_PER_SECOND.toInt(), date)
+                activeMovement = movementCountTime
+                delay(Movement.CountTimeTicker.MILLIS_PER_SECOND)
+            }
         }
     }
 
