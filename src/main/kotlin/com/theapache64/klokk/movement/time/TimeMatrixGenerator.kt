@@ -6,6 +6,7 @@ import com.theapache64.klokk.movement.StandByMatrixGenerator
 import com.theapache64.klokk.movement.core.MatrixGenerator
 import com.theapache64.klokk.movement.core.Movement
 import java.text.SimpleDateFormat
+import java.time.ZoneId
 
 /**
  * Responsible to show time animation and digits.
@@ -81,7 +82,7 @@ class TimeMatrixGenerator(data: Movement.Time) : MatrixGenerator<Movement.Time>(
         val m1Matrix = getMatrixFor(timeSplit[2])
         val m2Matrix = getMatrixFor(timeSplit[3])
 
-        val seconds = time.date.seconds.coerceAtLeast(0).coerceAtMost(60)
+        val seconds = time.date.toInstant().atZone(ZoneId.systemDefault()).second.coerceIn(0, 60)
 
         return mutableListOf<List<ClockData>>().apply {
             val fullMatrix = StandByMatrixGenerator(Movement.StandBy)
