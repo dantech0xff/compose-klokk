@@ -28,7 +28,6 @@ import com.theapache64.klokk.model.ClockData
 import com.theapache64.klokk.movement.core.Movement
 import com.theapache64.klokk.theme.CodGray
 import kotlinx.coroutines.launch
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
