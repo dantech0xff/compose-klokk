@@ -17,7 +17,9 @@
 
 ## 🏃 Run
 
-- Clone the repo and run `./gradlew run`
+- **Desktop**: Clone the repo and run `./gradlew :composeApp:run`
+- **Android**: `./gradlew :androidApp:installDebug` with an emulator/device connected (requires Android SDK)
+- **iOS**: Open `iosApp/iosApp.xcodeproj` in Xcode on macOS and run (requires a macOS host — iOS targets are only enabled when building on macOS)
 
 ## 💡 Inspiration
 

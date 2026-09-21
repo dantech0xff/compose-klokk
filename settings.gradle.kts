@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        google()
         gradlePluginPortal()
         mavenCentral()
     }
@@ -13,3 +14,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "klokk"
+
+include(":composeApp")
+include(":androidApp")
