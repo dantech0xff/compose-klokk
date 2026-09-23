@@ -13,16 +13,19 @@ import com.theapache64.klokk.generated.resources.googlesans_regular
 import org.jetbrains.compose.resources.Font
 
 @Composable
-fun klokkTypography(): Typography {
-    val googleSans = FontFamily(
+fun googleSansFontFamily(): FontFamily {
+    return FontFamily(
         Font(Res.font.googlesans_regular, FontWeight.Normal),
         Font(Res.font.googlesans_medium, FontWeight.Medium),
         Font(Res.font.googlesans_bold, FontWeight.Bold),
     )
+}
 
+@Composable
+fun klokkTypography(): Typography {
     return Typography(
 
-        defaultFontFamily = googleSans,
+        defaultFontFamily = googleSansFontFamily(),
 
         h1 = TextStyle(
             fontSize = 95.sp,
