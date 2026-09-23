@@ -120,7 +120,8 @@ fun SettingsTab(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp)
-                .height(52.dp),
+                .height(52.dp)
+                .tap { state.gate(PaywallReason.WIDGETS) {} },
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text("Widgets", color = KlokkTextPrimary, fontSize = 17.sp, modifier = Modifier.weight(1f))

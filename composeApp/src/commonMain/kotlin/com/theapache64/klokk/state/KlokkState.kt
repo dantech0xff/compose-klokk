@@ -113,6 +113,11 @@ class KlokkState {
     }
 
     fun stopRing() {
+        if (ringKind == RingKind.TIMER) {
+            tmRunning = false
+            tmEndTs = 0L
+            tmRemaining = tmTotal
+        }
         overlay = null
     }
 
