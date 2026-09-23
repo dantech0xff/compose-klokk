@@ -537,9 +537,10 @@ private fun onSecond(state: KlokkState, nowMs: Long) {
         alarm.on &&
             alarm.h == local.hour &&
             alarm.m == local.minute &&
-            // Suppress only the already-rung occurrence (id + minute); the
+            // Suppress only each alarm's already-rung occurrence (per-id
+            // epoch minute) so co-minute alarms queue once each and the
             // same alarm may fire again on its next scheduled day.
-            (alarm.id != state.rungAlarmId || nowMs / 60_000 != state.rungMinute) &&
+            state.rungAlarmMinutes[alarm.id] != nowMs / 60_000 &&
             // Alarm instants fall within the same minute as local; the
             // (minute, h) match survives a skipped :00 tick — we just also
             // skip alarms already rung for this occurrence.
@@ -551,8 +552,7 @@ private fun onSecond(state: KlokkState, nowMs: Long) {
             val index = state.alarms.indexOf(hit)
             state.alarms[index] = hit.copy(on = false)
         }
-        state.rungAlarmId = hit.id
-        state.rungMinute = nowMs / 60_000
+        state.rungAlarmMinutes[hit.id] = nowMs / 60_000
         // Queues behind an active ring instead of dropping the occurrence.
         state.startRing(RingKind.ALARM, hit.id, nowMs)
     }

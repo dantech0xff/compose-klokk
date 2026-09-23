@@ -57,8 +57,8 @@ class KlokkState {
     )
     var editingId by mutableStateOf<Int?>(null)
     var nextAlarmId = 3
-    var rungAlarmId by mutableStateOf(-1)
-    var rungMinute by mutableStateOf(-1L)
+    /** alarm id -> epoch minute it last rang at; suppresses only that occurrence. */
+    val rungAlarmMinutes = mutableMapOf<Int, Long>()
 
     // cities
     val cities = mutableStateListOf<City>()
