@@ -209,7 +209,7 @@ fun PaywallOverlay(
                                 .background(if (selected) KlokkSurface else Color.Transparent)
                                 .border(
                                     1.dp,
-                                    if (selected) KlokkTextPrimary else Color(0x1fffffff),
+                                    if (selected) KlokkTextPrimary else KlokkBorder,
                                     RoundedCornerShape(16.dp),
                                 )
                                 .tap { state.plan = plan }

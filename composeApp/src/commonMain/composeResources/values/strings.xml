@@ -178,4 +178,8 @@
     <string name="ring_time_up">Time is up</string>
     <string name="ring_hint_alarm">Swipe up to stop · tap to snooze</string>
     <string name="ring_hint_timer">Swipe up to stop</string>
+    <string name="appearance">Appearance</string>
+    <string name="appearance_system">Auto</string>
+    <string name="appearance_light">Light</string>
+    <string name="appearance_dark">Dark</string>
 </resources>

@@ -19,6 +19,9 @@ enum class PaywallReason { CITIES, SHOW, WIDGETS, SETTINGS }
 
 enum class PlusPlan { YEAR, MONTH, LIFE }
 
+/** Appearance preference; SYSTEM follows the platform dark/light setting. */
+enum class ThemeMode { SYSTEM, LIGHT, DARK }
+
 /** [days] is Sunday-first (index 0 = Sunday) like Date.getDay(). */
 data class Alarm(
     val id: Int,
@@ -39,6 +42,7 @@ data class FocusSession(val startMs: Long, val ms: Long)
  */
 class KlokkState {
     var tab by mutableStateOf(KlokkTab.CLOCK)
+    var themeMode by mutableStateOf(ThemeMode.SYSTEM)
     var sheet by mutableStateOf<KlokkSheet?>(null)
     var overlay by mutableStateOf<KlokkOverlay?>(null)
     var paywall by mutableStateOf<PaywallReason?>(null)
