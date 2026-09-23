@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <!-- Tab bar -->
+    <string name="tab_clock">Clock</string>
+    <string name="tab_alarm">Alarm</string>
+    <string name="tab_timer">Timer</string>
+    <string name="tab_focus">Focus</string>
+    <string name="tab_settings">Settings</string>
+
+    <!-- Hero captions -->
+    <string name="caption_drag_hours">Drag the hours or minutes to set</string>
+    <string name="caption_drag_minutes">Drag the minutes or seconds to set</string>
+    <string name="caption_snoozed">Snoozed until %1$s</string>
+    <string name="caption_next_alarm">Next alarm %1$s</string>
+    <string name="caption_no_alarms">No alarms set</string>
+    <string name="caption_ends_at">Ends at %1$s</string>
+    <string name="caption_paused">Paused</string>
+    <string name="caption_started">Started %1$s</string>
+    <string name="caption_focus">Focus</string>
+
+    <!-- Relative time "in 8h 37m" style, used inside captions -->
+    <string name="rel_days_hours">in %1$dd %2$dh</string>
+    <string name="rel_hours_minutes">in %1$dh %2$dm</string>
+    <string name="rel_hours">in %1$dh</string>
+    <string name="rel_minutes">in %1$dm</string>
+
+    <!-- Durations "45 s" / "20 min" / "1 h 5 min" -->
+    <string name="dur_seconds">%1$d s</string>
+    <string name="dur_minutes">%1$d min</string>
+    <string name="dur_hours">%1$d h</string>
+    <string name="dur_hours_minutes">%1$d h %2$d min</string>
+
+    <!-- Dates -->
+    <string name="date_line">%1$s, %2$d %3$s</string>
+    <string name="date_lock">%1$s, %2$s %3$d</string>
+    <string name="day_sun">Sunday</string>
+    <string name="day_mon">Monday</string>
+    <string name="day_tue">Tuesday</string>
+    <string name="day_wed">Wednesday</string>
+    <string name="day_thu">Thursday</string>
+    <string name="day_fri">Friday</string>
+    <string name="day_sat">Saturday</string>
+    <string name="month_1">January</string>
+    <string name="month_2">February</string>
+    <string name="month_3">March</string>
+    <string name="month_4">April</string>
+    <string name="month_5">May</string>
+    <string name="month_6">June</string>
+    <string name="month_7">July</string>
+    <string name="month_8">August</string>
+    <string name="month_9">September</string>
+    <string name="month_10">October</string>
+    <string name="month_11">November</string>
+    <string name="month_12">December</string>
+
+    <!-- Repeat summaries -->
+    <string name="days_every">Every day</string>
+    <string name="days_once">Once</string>
+    <string name="days_weekdays">Weekdays</string>
+    <string name="days_weekend">Weekend</string>
+    <string name="dow_sun">Sun</string>
+    <string name="dow_mon">Mon</string>
+    <string name="dow_tue">Tue</string>
+    <string name="dow_wed">Wed</string>
+    <string name="dow_thu">Thu</string>
+    <string name="dow_fri">Fri</string>
+    <string name="dow_sat">Sat</string>
+    <string name="dow_chip_mon">M</string>
+    <string name="dow_chip_tue">T</string>
+    <string name="dow_chip_wed">W</string>
+    <string name="dow_chip_thu">T</string>
+    <string name="dow_chip_fri">F</string>
+    <string name="dow_chip_sat">S</string>
+    <string name="dow_chip_sun">S</string>
+
+    <!-- City row subtitle -->
+    <string name="city_today">Today</string>
+    <string name="city_tomorrow">Tomorrow</string>
+    <string name="city_yesterday">Yesterday</string>
+    <string name="city_day_offset">%1$s, %2$s</string>
+
+    <!-- Clock tab -->
+    <string name="world_clock">World clock</string>
+    <string name="no_cities">No cities yet</string>
+    <string name="add_city_hint">Add a city to keep its time next to yours.</string>
+    <string name="add_city_hint_free">Add a city to keep its time next to yours. One is free.</string>
+    <string name="add_city">Add city</string>
+    <string name="delete">Delete</string>
+
+    <!-- City sheet -->
+    <string name="search_city">Search city or country</string>
+    <string name="no_city_found">No city found</string>
+    <string name="added">Added</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Alarm tab -->
+    <string name="new_alarm">New alarm</string>
+    <string name="label">Label</string>
+    <string name="preview">Preview</string>
+    <string name="done">Done</string>
+
+    <!-- Timer tab -->
+    <string name="start">Start</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="timer_preset">%1$d:00</string>
+
+    <!-- Focus tab -->
+    <string name="end">End</string>
+    <string name="focus_counting">Counting up until you end it</string>
+    <string name="focus_today">Today · %1$s</string>
+
+    <!-- Settings -->
+    <string name="plus_title">Klokk Plus</string>
+    <string name="plus_card_sub">Screensaver, widgets and unlimited cities</string>
+    <string name="unlock">Unlock</string>
+    <string name="active">Active</string>
+    <string name="screensaver">Screensaver</string>
+    <string name="widgets">Widgets</string>
+    <string name="plus_badge">Plus</string>
+    <string name="saver_hint_plus">Tap the clock to start.</string>
+    <string name="included_plus">Included with Klokk Plus.</string>
+    <string name="widgets_value_plus">Home &amp; Lock Screen</string>
+    <string name="widgets_hint_plus">Hold your Home or Lock Screen to add.</string>
+    <string name="widget_now">Now</string>
+    <string name="widget_small">Small</string>
+    <string name="widget_time">Time</string>
+    <string name="widget_medium">Medium</string>
+    <string name="widget_next_alarm">Next alarm</string>
+    <string name="widget_lock_screen">Lock Screen</string>
+    <string name="widget_next_alarm_pill">NEXT ALARM</string>
+
+    <!-- Saver sheet -->
+    <string name="show_shuffle">Shuffle</string>
+    <string name="show_ripple">Ripple</string>
+    <string name="show_trance">Trance</string>
+    <string name="show_wave">Wave</string>
+    <string name="saver_desc_shuffle">Every choreography, one after another.</string>
+    <string name="saver_desc_ripple">Hands fan out from the centre in slow rings.</string>
+    <string name="saver_desc_trance">Tiles morph through square, flower, fly and star.</string>
+    <string name="saver_desc_wave">Columns tilt back and forth like a tide.</string>
+    <string name="saver_unlock_cta">Unlock with Plus</string>
+    <string name="saver_use_cta">Use %1$s</string>
+    <string name="saver_in_use">In use</string>
+    <string name="saver_sheet_hint_plus">Tap the clock on the Clock tab to start</string>
+    <string name="saver_hint_free">Preview free · Klokk Plus to use</string>
+
+    <!-- Paywall -->
+    <string name="paywall_not_now">Not now</string>
+    <string name="paywall_lead_cities">Free keeps one city. Plus keeps every city you care about.</string>
+    <string name="paywall_lead_show">Tap the clock and the grid performs — Ripple, Trance, Wave and Shuffle.</string>
+    <string name="paywall_lead_widgets">Put the grid on your Home Screen and Lock Screen.</string>
+    <string name="paywall_lead_settings">The whole grid, everywhere you look.</string>
+    <string name="feature_cities_sub">Unlimited cities</string>
+    <string name="feature_saver_sub">Four choreographies</string>
+    <string name="plan_yearly">Yearly</string>
+    <string name="plan_yearly_note">7 days free · $1.00 a month</string>
+    <string name="plan_monthly">Monthly</string>
+    <string name="plan_monthly_note">Billed every month</string>
+    <string name="plan_lifetime">Lifetime</string>
+    <string name="plan_lifetime_note">Pay once</string>
+    <string name="price_yearly">$11.99</string>
+    <string name="price_monthly">$1.99</string>
+    <string name="price_lifetime">$24.99</string>
+    <string name="fineprint_yearly">7 days free, then $11.99 a year. Cancel anytime in Settings.</string>
+    <string name="fineprint_monthly">$1.99 a month. Cancel anytime in Settings.</string>
+    <string name="fineprint_lifetime">One payment. Yours for good on every device you sign in to.</string>
+    <string name="cta_try_free">Try free for 7 days</string>
+    <string name="cta_unlock_plus">Unlock Plus</string>
+    <string name="cta_unlocking">Unlocking…</string>
+    <string name="restore">Restore</string>
+    <string name="terms">Terms</string>
+    <string name="privacy">Privacy</string>
+
+    <!-- Ring overlay -->
+    <string name="ring_timer">TIMER</string>
+    <string name="ring_alarm">ALARM</string>
+    <string name="ring_time_up">Time is up</string>
+    <string name="ring_hint_alarm">Swipe up to stop · tap to snooze</string>
+    <string name="ring_hint_timer">Swipe up to stop</string>
+</resources>

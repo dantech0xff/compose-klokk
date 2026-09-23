@@ -9,10 +9,10 @@ import com.theapache64.klokk.theme.KlokkTheme
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "Kinetic Wall Clock",
+        title = "Klokk",
         state = rememberWindowState(
-            width = (CLOCKS_CONTAINER_WIDTH + PADDING).dp,
-            height = (CLOCKS_CONTAINER_HEIGHT + PADDING + 40).dp
+            width = 402.dp,
+            height = 874.dp
         ),
         resizable = false
     ) {
