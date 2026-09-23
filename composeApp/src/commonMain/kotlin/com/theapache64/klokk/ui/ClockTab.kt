@@ -43,8 +43,16 @@ import com.theapache64.klokk.state.PaywallReason
 import com.theapache64.klokk.theme.KlokkBackground
 import com.theapache64.klokk.theme.KlokkBorder
 import com.theapache64.klokk.theme.KlokkTextPrimary
+import com.theapache64.klokk.generated.resources.Res
+import com.theapache64.klokk.generated.resources.add_city
+import com.theapache64.klokk.generated.resources.add_city_hint
+import com.theapache64.klokk.generated.resources.add_city_hint_free
+import com.theapache64.klokk.generated.resources.delete
+import com.theapache64.klokk.generated.resources.no_cities
+import com.theapache64.klokk.generated.resources.world_clock
 import com.theapache64.klokk.theme.KlokkTextSecondary
-import com.theapache64.klokk.util.KlokkFormat
+import com.theapache64.klokk.util.cityInfo
+import org.jetbrains.compose.resources.stringResource
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 import kotlin.time.Instant
@@ -63,7 +71,7 @@ fun ClockTab(state: KlokkState, now: Instant) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                "World clock",
+                stringResource(Res.string.world_clock),
                 color = KlokkTextPrimary,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Medium,
@@ -96,20 +104,26 @@ fun ClockTab(state: KlokkState, now: Instant) {
                     .borderTop()
                     .padding(top = 28.dp, bottom = 8.dp),
             ) {
-                Text("No cities yet", color = KlokkTextPrimary, fontSize = 17.sp)
                 Text(
-                    if (state.isPlus()) {
-                        "Add a city to keep its time next to yours."
-                    } else {
-                        "Add a city to keep its time next to yours. One is free."
-                    },
+                    stringResource(Res.string.no_cities),
+                    color = KlokkTextPrimary,
+                    fontSize = 17.sp,
+                )
+                Text(
+                    stringResource(
+                        if (state.isPlus()) {
+                            Res.string.add_city_hint
+                        } else {
+                            Res.string.add_city_hint_free
+                        },
+                    ),
                     color = KlokkTextSecondary,
                     fontSize = 15.sp,
                     lineHeight = 21.sp,
                     modifier = Modifier.padding(top = 6.dp),
                 )
                 PillButton(
-                    "Add city",
+                    stringResource(Res.string.add_city),
                     onClick = {
                         val open = {
                             state.sheet = KlokkSheet.CITIES
@@ -157,7 +171,7 @@ private fun CityRow(
 ) {
     val scope = rememberCoroutineScope()
     val offsetX = remember { Animatable(0f) }
-    val info = KlokkFormat.cityInfo(city.tz, now)
+    val info = cityInfo(city.tz, now)
 
     Box(
         modifier = Modifier
@@ -180,7 +194,7 @@ private fun CityRow(
         ) {
             Spacer(Modifier.weight(1f))
             Text(
-                "Delete",
+                stringResource(Res.string.delete),
                 color = androidx.compose.ui.graphics.Color.Black,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,

@@ -63,9 +63,28 @@ import com.theapache64.klokk.ui.SaverSheet
 import com.theapache64.klokk.ui.ScrubTriangle
 import com.theapache64.klokk.ui.SettingsTab
 import com.theapache64.klokk.ui.TimerTab
+import com.theapache64.klokk.generated.resources.Res
+import com.theapache64.klokk.generated.resources.caption_drag_hours
+import com.theapache64.klokk.generated.resources.caption_drag_minutes
+import com.theapache64.klokk.generated.resources.caption_ends_at
+import com.theapache64.klokk.generated.resources.caption_focus
+import com.theapache64.klokk.generated.resources.caption_next_alarm
+import com.theapache64.klokk.generated.resources.caption_no_alarms
+import com.theapache64.klokk.generated.resources.caption_paused
+import com.theapache64.klokk.generated.resources.caption_snoozed
+import com.theapache64.klokk.generated.resources.caption_started
+import com.theapache64.klokk.generated.resources.ring_alarm
+import com.theapache64.klokk.generated.resources.ring_hint_alarm
+import com.theapache64.klokk.generated.resources.ring_hint_timer
+import com.theapache64.klokk.generated.resources.ring_time_up
+import com.theapache64.klokk.generated.resources.ring_timer
 import com.theapache64.klokk.ui.tap
 import com.theapache64.klokk.util.KlokkFormat
 import com.theapache64.klokk.util.KlokkFormat.NextAlarm
+import com.theapache64.klokk.util.dateLine
+import com.theapache64.klokk.util.relTime
+import com.theapache64.klokk.util.tabLabel
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -236,7 +255,7 @@ fun App() {
             ) {
                 KlokkTab.entries.forEach { tab ->
                     Text(
-                        tab.label,
+                        tabLabel(tab),
                         color = if (state.tab == tab) KlokkTextPrimary else KlokkTabInactive,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
@@ -416,9 +435,9 @@ fun App() {
             ringTitle(state),
             ringLabel(state, local),
             if (state.ringKind == RingKind.TIMER) {
-                "Swipe up to stop"
+                stringResource(Res.string.ring_hint_timer)
             } else {
-                "Swipe up to stop · tap to snooze"
+                stringResource(Res.string.ring_hint_alarm)
             },
         )
         SaverOverlay(state, saverMatrix(state, local))
@@ -430,15 +449,6 @@ fun App() {
         )
     }
 }
-
-private val KlokkTab.label: String
-    get() = when (this) {
-        KlokkTab.CLOCK -> "Clock"
-        KlokkTab.ALARM -> "Alarm"
-        KlokkTab.TIMERS -> "Timer"
-        KlokkTab.FOCUS -> "Focus"
-        KlokkTab.SETTINGS -> "Settings"
-    }
 
 private enum class ScrubTarget { ALARM, TIMER }
 
@@ -601,6 +611,7 @@ private fun heroMatrix(
     }
 }
 
+@Composable
 private fun heroCaption(
     state: KlokkState,
     now: Instant,
@@ -610,26 +621,32 @@ private fun heroCaption(
     KlokkTab.ALARM -> {
         val alarm = state.alarms.firstOrNull { it.id == state.editingId }
         when {
-            alarm != null -> "Drag the hours or minutes to set"
-            state.snoozeUntil > 0 -> "Snoozed until ${snoozeTime(state)}"
-            nextAlarm != null -> "Next alarm ${KlokkFormat.relTime(nextAlarm.ms)}"
-            else -> "No alarms set"
+            alarm != null -> stringResource(Res.string.caption_drag_hours)
+            state.snoozeUntil > 0 -> {
+                stringResource(Res.string.caption_snoozed, snoozeTime(state))
+            }
+
+            nextAlarm != null -> {
+                stringResource(Res.string.caption_next_alarm, relTime(nextAlarm.ms))
+            }
+
+            else -> stringResource(Res.string.caption_no_alarms)
         }
     }
 
     KlokkTab.TIMERS -> when {
-        state.tmRunning -> "Ends at ${endTime(state, now)}"
-        state.tmRemaining != state.tmTotal -> "Paused"
-        else -> "Drag the minutes or seconds to set"
+        state.tmRunning -> stringResource(Res.string.caption_ends_at, endTime(state, now))
+        state.tmRemaining != state.tmTotal -> stringResource(Res.string.caption_paused)
+        else -> stringResource(Res.string.caption_drag_minutes)
     }
 
     KlokkTab.FOCUS -> if (state.focusRunning) {
-        "Started ${startTime(state)}"
+        stringResource(Res.string.caption_started, startTime(state))
     } else {
-        "Focus"
+        stringResource(Res.string.caption_focus)
     }
 
-    else -> KlokkFormat.dateLine(now)
+    else -> dateLine(now)
 }
 
 private fun snoozeTime(state: KlokkState): String {
@@ -651,11 +668,12 @@ private fun startTime(state: KlokkState): String {
     return KlokkFormat.fmtHM(local.hour, local.minute)
 }
 
+@Composable
 private fun nextAlarmCaption(state: KlokkState, nextAlarm: NextAlarm?): String =
     if (nextAlarm != null) {
-        "Next alarm ${KlokkFormat.relTime(nextAlarm.ms)}"
+        stringResource(Res.string.caption_next_alarm, relTime(nextAlarm.ms))
     } else {
-        "No alarms set"
+        stringResource(Res.string.caption_no_alarms)
     }
 
 private fun timerRemaining(state: KlokkState, now: Instant): Int =
@@ -665,11 +683,14 @@ private fun timerRemaining(state: KlokkState, now: Instant): Int =
         state.tmRemaining
     }
 
-private fun ringTitle(state: KlokkState): String =
-    if (state.ringKind == RingKind.TIMER) "TIMER" else "ALARM"
+@Composable
+private fun ringTitle(state: KlokkState): String = stringResource(
+    if (state.ringKind == RingKind.TIMER) Res.string.ring_timer else Res.string.ring_alarm,
+)
 
+@Composable
 private fun ringLabel(state: KlokkState, local: LocalDateTime): String = when {
-    state.ringKind == RingKind.TIMER -> "Time is up"
+    state.ringKind == RingKind.TIMER -> stringResource(Res.string.ring_time_up)
     else -> {
         val alarm = state.alarms.firstOrNull { it.id == state.ringId }
         alarm?.label?.takeIf { it.isNotBlank() }

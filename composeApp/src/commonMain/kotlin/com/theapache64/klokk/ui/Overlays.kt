@@ -53,22 +53,31 @@ import com.theapache64.klokk.theme.KlokkBorder
 import com.theapache64.klokk.theme.KlokkSurface
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.theme.KlokkTextSecondary
+import com.theapache64.klokk.generated.resources.Res
+import com.theapache64.klokk.generated.resources.cta_try_free
+import com.theapache64.klokk.generated.resources.cta_unlock_plus
+import com.theapache64.klokk.generated.resources.cta_unlocking
+import com.theapache64.klokk.generated.resources.end
+import com.theapache64.klokk.generated.resources.feature_cities_sub
+import com.theapache64.klokk.generated.resources.feature_saver_sub
+import com.theapache64.klokk.generated.resources.paywall_not_now
+import com.theapache64.klokk.generated.resources.plus_title
+import com.theapache64.klokk.generated.resources.privacy
+import com.theapache64.klokk.generated.resources.restore
+import com.theapache64.klokk.generated.resources.screensaver
+import com.theapache64.klokk.generated.resources.terms
+import com.theapache64.klokk.generated.resources.widgets
+import com.theapache64.klokk.generated.resources.widgets_value_plus
+import com.theapache64.klokk.generated.resources.world_clock
+import com.theapache64.klokk.util.paywallLead
+import com.theapache64.klokk.util.planFineprint
+import com.theapache64.klokk.util.planLabel
+import com.theapache64.klokk.util.planNote
+import com.theapache64.klokk.util.planPrice
 import kotlin.time.Clock
+import org.jetbrains.compose.resources.stringResource
 
 private val pageEasing = CubicBezierEasing(0.2f, 0.8f, 0.2f, 1f)
-
-private val PAY_LEADS = mapOf(
-    PaywallReason.CITIES to "Free keeps one city. Plus keeps every city you care about.",
-    PaywallReason.SHOW to "Tap the clock and the grid performs — Ripple, Trance, Wave and Shuffle.",
-    PaywallReason.WIDGETS to "Put the grid on your Home Screen and Lock Screen.",
-    PaywallReason.SETTINGS to "The whole grid, everywhere you look.",
-)
-
-private val PAY_FEATURES = listOf(
-    Triple(PaywallReason.CITIES, "World clock", "Unlimited cities"),
-    Triple(PaywallReason.SHOW, "Screensaver", "Four choreographies"),
-    Triple(PaywallReason.WIDGETS, "Widgets", "Home & Lock Screen"),
-)
 
 /** Full-page Klokk Plus paywall sliding up over the app. */
 @Composable
@@ -101,7 +110,7 @@ fun PaywallOverlay(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    "Not now",
+                    stringResource(Res.string.paywall_not_now),
                     color = KlokkTextSecondary,
                     fontSize = 17.sp,
                     modifier = Modifier.tap {
@@ -123,7 +132,7 @@ fun PaywallOverlay(
                     payMatrix?.let { KlokkGrid(it, 16.dp, dim = false) }
                 }
                 Text(
-                    "Klokk Plus",
+                    stringResource(Res.string.plus_title),
                     color = KlokkTextPrimary,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Medium,
@@ -132,7 +141,7 @@ fun PaywallOverlay(
                     modifier = Modifier.fillMaxWidth().padding(top = 24.dp),
                 )
                 Text(
-                    PAY_LEADS[state.paywall] ?: "",
+                    state.paywall?.let { paywallLead(it) } ?: "",
                     color = KlokkTextSecondary,
                     fontSize = 15.sp,
                     lineHeight = 21.sp,
@@ -142,7 +151,24 @@ fun PaywallOverlay(
                         .padding(top = 8.dp, start = 12.dp, end = 12.dp),
                 )
                 Column(modifier = Modifier.padding(top = 22.dp)) {
-                    PAY_FEATURES.forEach { (reason, name, detail) ->
+                    val payFeatures = listOf(
+                        Triple(
+                            PaywallReason.CITIES,
+                            stringResource(Res.string.world_clock),
+                            stringResource(Res.string.feature_cities_sub),
+                        ),
+                        Triple(
+                            PaywallReason.SHOW,
+                            stringResource(Res.string.screensaver),
+                            stringResource(Res.string.feature_saver_sub),
+                        ),
+                        Triple(
+                            PaywallReason.WIDGETS,
+                            stringResource(Res.string.widgets),
+                            stringResource(Res.string.widgets_value_plus),
+                        ),
+                    )
+                    payFeatures.forEach { (reason, name, detail) ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -191,11 +217,11 @@ fun PaywallOverlay(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(plan.label, color = KlokkTextPrimary, fontSize = 17.sp)
-                                Text(plan.note, color = KlokkTextSecondary, fontSize = 13.sp)
+                                Text(planLabel(plan), color = KlokkTextPrimary, fontSize = 17.sp)
+                                Text(planNote(plan), color = KlokkTextSecondary, fontSize = 13.sp)
                             }
                             Text(
-                                plan.price,
+                                planPrice(plan),
                                 color = KlokkTextPrimary,
                                 fontSize = 17.sp,
                                 style = TextStyle(fontFeatureSettings = "tnum"),
@@ -212,9 +238,12 @@ fun PaywallOverlay(
             ) {
                 PillButton(
                     text = when {
-                        state.buying -> "Unlocking…"
-                        state.plan == PlusPlan.YEAR -> "Try free for 7 days"
-                        else -> "Unlock Plus"
+                        state.buying -> stringResource(Res.string.cta_unlocking)
+                        state.plan == PlusPlan.YEAR -> {
+                            stringResource(Res.string.cta_try_free)
+                        }
+
+                        else -> stringResource(Res.string.cta_unlock_plus)
                     },
                     onClick = { state.unlock() },
                     modifier = Modifier
@@ -225,7 +254,7 @@ fun PaywallOverlay(
                     enabled = !state.buying,
                 )
                 Text(
-                    state.plan.fineprint,
+                    planFineprint(state.plan),
                     color = KlokkTextSecondary,
                     fontSize = 13.sp,
                     lineHeight = 18.sp,
@@ -241,13 +270,21 @@ fun PaywallOverlay(
                     horizontalArrangement = Arrangement.spacedBy(22.dp, Alignment.CenterHorizontally),
                 ) {
                     Text(
-                        "Restore",
+                        stringResource(Res.string.restore),
                         color = KlokkTextSecondary,
                         fontSize = 13.sp,
                         modifier = Modifier.tap { state.unlock() },
                     )
-                    Text("Terms", color = KlokkTextSecondary, fontSize = 13.sp)
-                    Text("Privacy", color = KlokkTextSecondary, fontSize = 13.sp)
+                    Text(
+                        stringResource(Res.string.terms),
+                        color = KlokkTextSecondary,
+                        fontSize = 13.sp,
+                    )
+                    Text(
+                        stringResource(Res.string.privacy),
+                        color = KlokkTextSecondary,
+                        fontSize = 13.sp,
+                    )
                 }
             }
         }
@@ -371,7 +408,7 @@ fun FocusEndControl(state: KlokkState, modifier: Modifier = Modifier) {
         modifier = modifier,
     ) {
         CircleActionButton(
-            label = "End",
+            label = stringResource(Res.string.end),
             onClick = {
                 val now = Clock.System.now().toEpochMilliseconds()
                 state.focusSessions.add(

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <!-- Tab bar -->
+    <string name="tab_clock">Đồng hồ</string>
+    <string name="tab_alarm">Báo thức</string>
+    <string name="tab_timer">Hẹn giờ</string>
+    <string name="tab_focus">Tập trung</string>
+    <string name="tab_settings">Cài đặt</string>
+
+    <!-- Hero captions -->
+    <string name="caption_drag_hours">Kéo để chỉnh giờ hoặc phút</string>
+    <string name="caption_drag_minutes">Kéo để chỉnh phút hoặc giây</string>
+    <string name="caption_snoozed">Đã báo lại đến %1$s</string>
+    <string name="caption_next_alarm">Báo thức tiếp theo %1$s</string>
+    <string name="caption_no_alarms">Chưa đặt báo thức</string>
+    <string name="caption_ends_at">Kết thúc lúc %1$s</string>
+    <string name="caption_paused">Đã tạm dừng</string>
+    <string name="caption_started">Bắt đầu lúc %1$s</string>
+    <string name="caption_focus">Tập trung</string>
+
+    <!-- Relative time "in 8h 37m" style, used inside captions -->
+    <string name="rel_days_hours">sau %1$d ngày %2$d giờ</string>
+    <string name="rel_hours_minutes">sau %1$d giờ %2$d phút</string>
+    <string name="rel_hours">sau %1$d giờ</string>
+    <string name="rel_minutes">sau %1$d phút</string>
+
+    <!-- Durations "45 s" / "20 min" / "1 h 5 min" -->
+    <string name="dur_seconds">%1$d giây</string>
+    <string name="dur_minutes">%1$d phút</string>
+    <string name="dur_hours">%1$d giờ</string>
+    <string name="dur_hours_minutes">%1$d giờ %2$d phút</string>
+
+    <!-- Dates -->
+    <string name="date_line">%1$s, ngày %2$d %3$s</string>
+    <string name="date_lock">%1$s, ngày %3$d %2$s</string>
+    <string name="day_sun">Chủ nhật</string>
+    <string name="day_mon">Thứ hai</string>
+    <string name="day_tue">Thứ ba</string>
+    <string name="day_wed">Thứ tư</string>
+    <string name="day_thu">Thứ năm</string>
+    <string name="day_fri">Thứ sáu</string>
+    <string name="day_sat">Thứ bảy</string>
+    <string name="month_1">tháng 1</string>
+    <string name="month_2">tháng 2</string>
+    <string name="month_3">tháng 3</string>
+    <string name="month_4">tháng 4</string>
+    <string name="month_5">tháng 5</string>
+    <string name="month_6">tháng 6</string>
+    <string name="month_7">tháng 7</string>
+    <string name="month_8">tháng 8</string>
+    <string name="month_9">tháng 9</string>
+    <string name="month_10">tháng 10</string>
+    <string name="month_11">tháng 11</string>
+    <string name="month_12">tháng 12</string>
+
+    <!-- Repeat summaries -->
+    <string name="days_every">Mỗi ngày</string>
+    <string name="days_once">Một lần</string>
+    <string name="days_weekdays">Ngày trong tuần</string>
+    <string name="days_weekend">Cuối tuần</string>
+    <string name="dow_sun">CN</string>
+    <string name="dow_mon">T2</string>
+    <string name="dow_tue">T3</string>
+    <string name="dow_wed">T4</string>
+    <string name="dow_thu">T5</string>
+    <string name="dow_fri">T6</string>
+    <string name="dow_sat">T7</string>
+    <string name="dow_chip_mon">T2</string>
+    <string name="dow_chip_tue">T3</string>
+    <string name="dow_chip_wed">T4</string>
+    <string name="dow_chip_thu">T5</string>
+    <string name="dow_chip_fri">T6</string>
+    <string name="dow_chip_sat">T7</string>
+    <string name="dow_chip_sun">CN</string>
+
+    <!-- City row subtitle -->
+    <string name="city_today">Hôm nay</string>
+    <string name="city_tomorrow">Ngày mai</string>
+    <string name="city_yesterday">Hôm qua</string>
+    <string name="city_day_offset">%1$s, %2$s</string>
+
+    <!-- Clock tab -->
+    <string name="world_clock">Đồng hồ thế giới</string>
+    <string name="no_cities">Chưa có thành phố nào</string>
+    <string name="add_city_hint">Thêm một thành phố để xem giờ bên cạnh giờ của bạn.</string>
+    <string name="add_city_hint_free">Thêm một thành phố để xem giờ bên cạnh giờ của bạn. Miễn phí một thành phố.</string>
+    <string name="add_city">Thêm thành phố</string>
+    <string name="delete">Xoá</string>
+
+    <!-- City sheet -->
+    <string name="search_city">Tìm thành phố hoặc quốc gia</string>
+    <string name="no_city_found">Không tìm thấy thành phố</string>
+    <string name="added">Đã thêm</string>
+    <string name="cancel">Huỷ</string>
+
+    <!-- Alarm tab -->
+    <string name="new_alarm">Báo thức mới</string>
+    <string name="label">Nhãn</string>
+    <string name="preview">Xem trước</string>
+    <string name="done">Xong</string>
+
+    <!-- Timer tab -->
+    <string name="start">Bắt đầu</string>
+    <string name="pause">Tạm dừng</string>
+    <string name="resume">Tiếp tục</string>
+    <string name="timer_preset">%1$d:00</string>
+
+    <!-- Focus tab -->
+    <string name="end">Kết thúc</string>
+    <string name="focus_counting">Đang đếm thời gian cho đến khi bạn kết thúc</string>
+    <string name="focus_today">Hôm nay · %1$s</string>
+
+    <!-- Settings -->
+    <string name="plus_title">Klokk Plus</string>
+    <string name="plus_card_sub">Trình bảo mật, tiện ích và thành phố không giới hạn</string>
+    <string name="unlock">Mở khoá</string>
+    <string name="active">Đang dùng</string>
+    <string name="screensaver">Trình bảo mật</string>
+    <string name="widgets">Tiện ích</string>
+    <string name="plus_badge">Plus</string>
+    <string name="saver_hint_plus">Chạm vào đồng hồ để bắt đầu.</string>
+    <string name="included_plus">Đi kèm Klokk Plus.</string>
+    <string name="widgets_value_plus">Màn hình chính &amp; khoá</string>
+    <string name="widgets_hint_plus">Nhấn giữ Màn hình chính hoặc Màn hình khoá để thêm.</string>
+    <string name="widget_now">Bây giờ</string>
+    <string name="widget_small">Nhỏ</string>
+    <string name="widget_time">Giờ</string>
+    <string name="widget_medium">Vừa</string>
+    <string name="widget_next_alarm">Báo thức tiếp theo</string>
+    <string name="widget_lock_screen">Màn hình khoá</string>
+    <string name="widget_next_alarm_pill">BÁO THỨC TIẾP THEO</string>
+
+    <!-- Saver sheet -->
+    <string name="show_shuffle">Trộn</string>
+    <string name="show_ripple">Gợn sóng</string>
+    <string name="show_trance">Mê hoặc</string>
+    <string name="show_wave">Sóng</string>
+    <string name="saver_desc_shuffle">Mọi điệu nhảy, lần lượt từng cái một.</string>
+    <string name="saver_desc_ripple">Các kim đồng hồ lan ra từ tâm thành từng vòng chậm rãi.</string>
+    <string name="saver_desc_trance">Các ô biến đổi qua hình vuông, bông hoa, cánh chim và ngôi sao.</string>
+    <string name="saver_desc_wave">Các cột nghiêng qua lại như sóng.</string>
+    <string name="saver_unlock_cta">Mở khoá với Plus</string>
+    <string name="saver_use_cta">Dùng %1$s</string>
+    <string name="saver_in_use">Đang dùng</string>
+    <string name="saver_sheet_hint_plus">Chạm vào đồng hồ ở tab Đồng hồ để bắt đầu</string>
+    <string name="saver_hint_free">Xem trước miễn phí · Dùng cần Klokk Plus</string>
+
+    <!-- Paywall -->
+    <string name="paywall_not_now">Để sau</string>
+    <string name="paywall_lead_cities">Bản miễn phí giữ một thành phố. Plus giữ mọi thành phố bạn quan tâm.</string>
+    <string name="paywall_lead_show">Chạm vào đồng hồ và lưới sẽ biểu diễn — Gợn sóng, Mê hoặc, Sóng và Trộn.</string>
+    <string name="paywall_lead_widgets">Đặt lưới đồng hồ lên Màn hình chính và Màn hình khoá.</string>
+    <string name="paywall_lead_settings">Toàn bộ lưới đồng hồ, ở mọi nơi bạn nhìn.</string>
+    <string name="feature_cities_sub">Thành phố không giới hạn</string>
+    <string name="feature_saver_sub">Bốn điệu nhảy</string>
+    <string name="plan_yearly">Hàng năm</string>
+    <string name="plan_yearly_note">7 ngày miễn phí · $1.00 mỗi tháng</string>
+    <string name="plan_monthly">Hàng tháng</string>
+    <string name="plan_monthly_note">Thanh toán mỗi tháng</string>
+    <string name="plan_lifetime">Trọn đời</string>
+    <string name="plan_lifetime_note">Trả một lần</string>
+    <string name="price_yearly">$11.99</string>
+    <string name="price_monthly">$1.99</string>
+    <string name="price_lifetime">$24.99</string>
+    <string name="fineprint_yearly">Miễn phí 7 ngày, sau đó $11.99 mỗi năm. Huỷ bất cứ lúc nào trong Cài đặt.</string>
+    <string name="fineprint_monthly">$1.99 mỗi tháng. Huỷ bất cứ lúc nào trong Cài đặt.</string>
+    <string name="fineprint_lifetime">Trả một lần. Dùng trọn đời trên mọi thiết bị bạn đăng nhập.</string>
+    <string name="cta_try_free">Dùng thử miễn phí 7 ngày</string>
+    <string name="cta_unlock_plus">Mở khoá Plus</string>
+    <string name="cta_unlocking">Đang mở khoá…</string>
+    <string name="restore">Khôi phục</string>
+    <string name="terms">Điều khoản</string>
+    <string name="privacy">Quyền riêng tư</string>
+
+    <!-- Ring overlay -->
+    <string name="ring_timer">HẸN GIỜ</string>
+    <string name="ring_alarm">BÁO THỨC</string>
+    <string name="ring_time_up">Hết giờ</string>
+    <string name="ring_hint_alarm">Vuốt lên để tắt · chạm để báo lại</string>
+    <string name="ring_hint_timer">Vuốt lên để tắt</string>
+</resources>

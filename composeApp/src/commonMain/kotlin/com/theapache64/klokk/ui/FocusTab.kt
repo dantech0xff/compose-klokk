@@ -14,10 +14,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.theapache64.klokk.generated.resources.Res
+import com.theapache64.klokk.generated.resources.focus_counting
+import com.theapache64.klokk.generated.resources.focus_today
+import com.theapache64.klokk.generated.resources.start
 import com.theapache64.klokk.state.KlokkState
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.theme.KlokkTextSecondary
 import com.theapache64.klokk.util.KlokkFormat
+import com.theapache64.klokk.util.fmtDur
+import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Clock
 import kotlin.time.Instant
 import kotlinx.datetime.toLocalDateTime
@@ -31,7 +37,7 @@ fun FocusTab(state: KlokkState, now: Instant) {
     ) {
         Spacer(Modifier.height(30.dp))
         CircleActionButton(
-            label = "Start",
+            label = stringResource(Res.string.start),
             onClick = {
                 state.focusRunning = true
                 state.focusStartTs = Clock.System.now().toEpochMilliseconds()
@@ -47,8 +53,8 @@ fun FocusTab(state: KlokkState, now: Instant) {
             }
             .sumOf { it.ms }
         val note = when {
-            state.focusRunning -> "Counting up until you end it"
-            total > 0 -> "Today · ${KlokkFormat.fmtDur(total)}"
+            state.focusRunning -> stringResource(Res.string.focus_counting)
+            total > 0 -> stringResource(Res.string.focus_today, fmtDur(total))
             else -> ""
         }
         Text(
@@ -77,7 +83,7 @@ fun FocusTab(state: KlokkState, now: Instant) {
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
-                    KlokkFormat.fmtDur(session.ms),
+                    fmtDur(session.ms),
                     color = KlokkTextPrimary,
                     fontSize = 15.sp,
                     style = TextStyle(fontFeatureSettings = "tnum"),

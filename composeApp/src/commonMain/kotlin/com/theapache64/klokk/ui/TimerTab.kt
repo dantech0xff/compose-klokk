@@ -22,9 +22,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.theapache64.klokk.generated.resources.Res
+import com.theapache64.klokk.generated.resources.cancel
+import com.theapache64.klokk.generated.resources.pause
+import com.theapache64.klokk.generated.resources.resume
+import com.theapache64.klokk.generated.resources.start
+import com.theapache64.klokk.generated.resources.timer_preset
 import com.theapache64.klokk.state.KlokkState
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.theme.KlokkTextSecondary
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.ceil
 import kotlin.time.Clock
 
@@ -47,7 +54,7 @@ fun TimerTab(state: KlokkState) {
             PRESETS.forEach { p ->
                 val active = !state.tmRunning && state.tmTotal == p && state.tmRemaining == p
                 Text(
-                    "${p / 60}:00",
+                    stringResource(Res.string.timer_preset, p / 60),
                     color = if (active) KlokkTextPrimary else KlokkTextSecondary,
                     fontSize = 15.sp,
                     style = TextStyle(fontFeatureSettings = "tnum"),
@@ -89,7 +96,7 @@ fun TimerTab(state: KlokkState) {
                     contentAlignment = Alignment.CenterEnd,
                 ) {
                     CircleActionButton(
-                        label = "Cancel",
+                        label = stringResource(Res.string.cancel),
                         onClick = {
                             state.tmRunning = false
                             state.tmRemaining = state.tmTotal
@@ -100,9 +107,9 @@ fun TimerTab(state: KlokkState) {
             }
             CircleActionButton(
                 label = when {
-                    state.tmRunning -> "Pause"
-                    state.tmRemaining < state.tmTotal -> "Resume"
-                    else -> "Start"
+                    state.tmRunning -> stringResource(Res.string.pause)
+                    state.tmRemaining < state.tmTotal -> stringResource(Res.string.resume)
+                    else -> stringResource(Res.string.start)
                 },
                 onClick = {
                     if (state.tmRunning) {

@@ -47,8 +47,23 @@ import com.theapache64.klokk.theme.KlokkField
 import com.theapache64.klokk.theme.KlokkSurface
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.theme.KlokkTextSecondary
-import com.theapache64.klokk.util.KlokkFormat
+import com.theapache64.klokk.generated.resources.Res
+import com.theapache64.klokk.generated.resources.add_city
+import com.theapache64.klokk.generated.resources.added
+import com.theapache64.klokk.generated.resources.cancel
+import com.theapache64.klokk.generated.resources.no_city_found
+import com.theapache64.klokk.generated.resources.saver_hint_free
+import com.theapache64.klokk.generated.resources.saver_in_use
+import com.theapache64.klokk.generated.resources.saver_sheet_hint_plus
+import com.theapache64.klokk.generated.resources.saver_unlock_cta
+import com.theapache64.klokk.generated.resources.saver_use_cta
+import com.theapache64.klokk.generated.resources.screensaver
+import com.theapache64.klokk.generated.resources.search_city
+import com.theapache64.klokk.util.cityInfo
+import com.theapache64.klokk.util.saverDescription
+import com.theapache64.klokk.util.saverShowName
 import kotlin.time.Instant
+import org.jetbrains.compose.resources.stringResource
 
 private val sheetEasing = CubicBezierEasing(0.2f, 0.8f, 0.2f, 1f)
 
@@ -113,7 +128,7 @@ private fun SheetFrame(
                         modifier = Modifier.weight(1f),
                     )
                     Text(
-                        "Cancel",
+                        stringResource(Res.string.cancel),
                         color = KlokkTextPrimary,
                         fontSize = 17.sp,
                         modifier = Modifier.tap(onCancel),
@@ -131,7 +146,7 @@ fun CitySheet(state: KlokkState, now: Instant) {
     SheetFrame(
         visible = state.sheet == KlokkSheet.CITIES,
         height = 560.dp,
-        title = "Add city",
+        title = stringResource(Res.string.add_city),
         onCancel = { state.sheet = null },
     ) {
         BasicTextField(
@@ -149,7 +164,11 @@ fun CitySheet(state: KlokkState, now: Instant) {
             decorationBox = { inner ->
                 Box(contentAlignment = Alignment.CenterStart) {
                     if (state.citySearch.isEmpty()) {
-                        Text("Search city or country", color = Color(0xff5f5f5f), fontSize = 17.sp)
+                        Text(
+                            stringResource(Res.string.search_city),
+                            color = Color(0xff5f5f5f),
+                            fontSize = 17.sp,
+                        )
                     }
                     inner()
                 }
@@ -163,7 +182,7 @@ fun CitySheet(state: KlokkState, now: Instant) {
 
         if (options.isEmpty()) {
             Text(
-                "No city found",
+                stringResource(Res.string.no_city_found),
                 color = KlokkTextSecondary,
                 fontSize = 15.sp,
                 textAlign = TextAlign.Center,
@@ -193,7 +212,11 @@ fun CitySheet(state: KlokkState, now: Instant) {
                         Text(region, color = KlokkTextSecondary, fontSize = 13.sp)
                     }
                     Text(
-                        if (added) "Added" else KlokkFormat.cityInfo(tz, now).time,
+                        if (added) {
+                            stringResource(Res.string.added)
+                        } else {
+                            cityInfo(tz, now).time
+                        },
                         color = KlokkTextSecondary,
                         fontSize = 15.sp,
                         style = TextStyle(fontFeatureSettings = "tnum"),
@@ -203,13 +226,6 @@ fun CitySheet(state: KlokkState, now: Instant) {
         }
     }
 }
-
-private val SAVER_DESCRIPTIONS = mapOf(
-    SaverShow.SHUFFLE to "Every choreography, one after another.",
-    SaverShow.RIPPLE to "Hands fan out from the centre in slow rings.",
-    SaverShow.TRANCE to "Tiles morph through square, flower, fly and star.",
-    SaverShow.WAVE to "Columns tilt back and forth like a tide.",
-)
 
 /** Screensaver picker — live preview cycling the selected choreography. */
 @Composable
@@ -221,7 +237,7 @@ fun SaverSheet(
     SheetFrame(
         visible = state.sheet == KlokkSheet.SAVER,
         height = 640.dp,
-        title = "Screensaver",
+        title = stringResource(Res.string.screensaver),
         onCancel = { state.sheet = null },
     ) {
         Column {
@@ -249,7 +265,7 @@ fun SaverSheet(
             ) {
                 SaverShow.entries.forEach { show ->
                     Text(
-                        show.label,
+                        saverShowName(show),
                         color = if (state.saverPreview == show) KlokkTextPrimary else KlokkTextSecondary,
                         fontSize = 17.sp,
                         modifier = Modifier.tap {
@@ -260,7 +276,7 @@ fun SaverSheet(
                 }
             }
             Text(
-                SAVER_DESCRIPTIONS.getValue(state.saverPreview),
+                saverDescription(state.saverPreview),
                 color = KlokkTextSecondary,
                 fontSize = 15.sp,
                 lineHeight = 21.sp,
@@ -273,9 +289,11 @@ fun SaverSheet(
             val inUse = plus && state.saverPreview == state.saverShow
             PillButton(
                 text = when {
-                    !plus -> "Unlock with Plus"
-                    inUse -> "In use"
-                    else -> "Use ${state.saverPreview.label}"
+                    !plus -> stringResource(Res.string.saver_unlock_cta)
+                    inUse -> stringResource(Res.string.saver_in_use)
+                    else -> {
+                        stringResource(Res.string.saver_use_cta, saverShowName(state.saverPreview))
+                    }
                 },
                 onClick = {
                     if (!inUse) {
@@ -293,7 +311,9 @@ fun SaverSheet(
                 fontSize = 17f,
             )
             Text(
-                if (plus) "Tap the clock on the Clock tab to start" else "Preview free · Klokk Plus to use",
+                stringResource(
+                    if (plus) Res.string.saver_sheet_hint_plus else Res.string.saver_hint_free,
+                ),
                 color = KlokkTextSecondary,
                 fontSize = 13.sp,
                 textAlign = TextAlign.Center,

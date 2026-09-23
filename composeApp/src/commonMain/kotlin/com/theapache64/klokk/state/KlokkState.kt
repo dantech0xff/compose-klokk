@@ -17,20 +17,7 @@ enum class RingKind { ALARM, TIMER }
 /** What the paywall was opened for; highlights the matching feature row. */
 enum class PaywallReason { CITIES, SHOW, WIDGETS, SETTINGS }
 
-enum class PlusPlan(val label: String, val note: String, val price: String, val fineprint: String) {
-    YEAR(
-        "Yearly", "7 days free · $1.00 a month", "$11.99",
-        "7 days free, then $11.99 a year. Cancel anytime in Settings."
-    ),
-    MONTH(
-        "Monthly", "Billed every month", "$1.99",
-        "$1.99 a month. Cancel anytime in Settings."
-    ),
-    LIFE(
-        "Lifetime", "Pay once", "$24.99",
-        "One payment. Yours for good on every device you sign in to."
-    ),
-}
+enum class PlusPlan { YEAR, MONTH, LIFE }
 
 /** [days] is Sunday-first (index 0 = Sunday) like Date.getDay(). */
 data class Alarm(

@@ -27,6 +27,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.theapache64.klokk.generated.resources.Res
+import com.theapache64.klokk.generated.resources.delete
+import com.theapache64.klokk.generated.resources.done
+import com.theapache64.klokk.generated.resources.label
+import com.theapache64.klokk.generated.resources.new_alarm
+import com.theapache64.klokk.generated.resources.preview
 import com.theapache64.klokk.state.Alarm
 import com.theapache64.klokk.state.KlokkState
 import com.theapache64.klokk.state.RingKind
@@ -34,10 +40,12 @@ import com.theapache64.klokk.theme.KlokkBorder
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.theme.KlokkTextSecondary
 import com.theapache64.klokk.util.KlokkFormat
+import com.theapache64.klokk.util.dayChipNames
+import com.theapache64.klokk.util.daysText
 import kotlin.time.Clock
+import org.jetbrains.compose.resources.stringResource
 
 private val DAY_ORDER = listOf(1, 2, 3, 4, 5, 6, 0)
-private val DAY_LABELS = listOf("M", "T", "W", "T", "F", "S", "S")
 
 fun Modifier.borderBottom(color: Color = Color(0x1fffffff)): Modifier = this.drawBehind {
     drawLine(
@@ -77,9 +85,9 @@ fun AlarmTab(state: KlokkState) {
                         )
                         Text(
                             if (alarm.label.isNotEmpty()) {
-                                "${alarm.label} · ${KlokkFormat.daysText(alarm.days)}"
+                                "${alarm.label} · ${daysText(alarm.days)}"
                             } else {
-                                KlokkFormat.daysText(alarm.days)
+                                daysText(alarm.days)
                             },
                             color = KlokkTextSecondary,
                             fontSize = 13.sp,
@@ -125,7 +133,11 @@ fun AlarmTab(state: KlokkState) {
             ) {
                 PlusGlyph(14.dp)
                 Spacer(Modifier.width(14.dp))
-                Text("New alarm", color = KlokkTextPrimary, fontSize = 17.sp)
+                Text(
+                    stringResource(Res.string.new_alarm),
+                    color = KlokkTextPrimary,
+                    fontSize = 17.sp,
+                )
             }
         }
     }
@@ -138,6 +150,7 @@ private fun AlarmEditor(state: KlokkState, alarm: Alarm) {
             .padding(top = 4.dp, bottom = 26.dp)
     ) {
         // Day chips M T W T F S S
+        val chipNames = dayChipNames()
         Row(modifier = Modifier.fillMaxWidth()) {
             DAY_ORDER.forEachIndexed { i, day ->
                 val on = alarm.days[day]
@@ -161,7 +174,7 @@ private fun AlarmEditor(state: KlokkState, alarm: Alarm) {
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        DAY_LABELS[i],
+                        chipNames[day],
                         color = if (on) Color.Black else KlokkTextSecondary,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium,
@@ -193,7 +206,11 @@ private fun AlarmEditor(state: KlokkState, alarm: Alarm) {
             decorationBox = { inner ->
                 Box(contentAlignment = Alignment.CenterStart) {
                     if (alarm.label.isEmpty()) {
-                        Text("Label", color = Color(0xff5f5f5f), fontSize = 17.sp)
+                        Text(
+                            stringResource(Res.string.label),
+                            color = Color(0xff5f5f5f),
+                            fontSize = 17.sp,
+                        )
                     }
                     inner()
                 }
@@ -207,7 +224,7 @@ private fun AlarmEditor(state: KlokkState, alarm: Alarm) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                "Delete",
+                stringResource(Res.string.delete),
                 color = KlokkTextSecondary,
                 fontSize = 15.sp,
                 modifier = Modifier.tap {
@@ -217,7 +234,7 @@ private fun AlarmEditor(state: KlokkState, alarm: Alarm) {
             )
             Spacer(Modifier.weight(1f))
             Text(
-                "Preview",
+                stringResource(Res.string.preview),
                 color = KlokkTextSecondary,
                 fontSize = 15.sp,
                 modifier = Modifier.tap {
@@ -230,7 +247,7 @@ private fun AlarmEditor(state: KlokkState, alarm: Alarm) {
             )
             Spacer(Modifier.width(18.dp))
             PillButton(
-                "Done",
+                stringResource(Res.string.done),
                 onClick = { state.editingId = null },
                 modifier = Modifier.width(86.dp),
             )

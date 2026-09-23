@@ -12,11 +12,11 @@ import com.theapache64.klokk.movement.snake.WaveMatrixGenerator
 /**
  * Which choreography the screensaver plays.
  */
-enum class SaverShow(val label: String) {
-    SHUFFLE("Shuffle"),
-    RIPPLE("Ripple"),
-    TRANCE("Trance"),
-    WAVE("Wave"),
+enum class SaverShow {
+    SHUFFLE,
+    RIPPLE,
+    TRANCE,
+    WAVE,
 }
 
 private const val SHOW_DURATION_MS = 5000

@@ -31,9 +31,31 @@ import com.theapache64.klokk.theme.KlokkSurface
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.theme.KlokkTextSecondary
 import com.theapache64.klokk.theme.CodGray
+import com.theapache64.klokk.generated.resources.Res
+import com.theapache64.klokk.generated.resources.active
+import com.theapache64.klokk.generated.resources.included_plus
+import com.theapache64.klokk.generated.resources.plus_badge
+import com.theapache64.klokk.generated.resources.plus_card_sub
+import com.theapache64.klokk.generated.resources.plus_title
+import com.theapache64.klokk.generated.resources.saver_hint_plus
+import com.theapache64.klokk.generated.resources.screensaver
+import com.theapache64.klokk.generated.resources.unlock
+import com.theapache64.klokk.generated.resources.widget_lock_screen
+import com.theapache64.klokk.generated.resources.widget_medium
+import com.theapache64.klokk.generated.resources.widget_next_alarm
+import com.theapache64.klokk.generated.resources.widget_next_alarm_pill
+import com.theapache64.klokk.generated.resources.widget_now
+import com.theapache64.klokk.generated.resources.widget_small
+import com.theapache64.klokk.generated.resources.widget_time
+import com.theapache64.klokk.generated.resources.widgets
+import com.theapache64.klokk.generated.resources.widgets_hint_plus
+import com.theapache64.klokk.generated.resources.widgets_value_plus
 import com.theapache64.klokk.util.KlokkFormat
+import com.theapache64.klokk.util.lockDate
+import com.theapache64.klokk.util.saverShowName
 import kotlin.time.Instant
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.stringResource
 
 /** Settings: Klokk Plus card, screensaver picker entry, widget previews. */
 @Composable
@@ -62,16 +84,27 @@ fun SettingsTab(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(modifier = Modifier.weight(1f).padding(end = 16.dp)) {
-                    Text("Klokk Plus", color = KlokkTextPrimary, fontSize = 17.sp, fontWeight = FontWeight.Medium)
                     Text(
-                        "Screensaver, widgets and unlimited cities",
+                        stringResource(Res.string.plus_title),
+                        color = KlokkTextPrimary,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Medium,
+                    )
+                    Text(
+                        stringResource(Res.string.plus_card_sub),
                         color = KlokkTextSecondary,
                         fontSize = 13.sp,
                         lineHeight = 18.sp,
                         modifier = Modifier.padding(top = 4.dp),
                     )
                 }
-                PillButton("Unlock", onClick = {}, height = 34.dp, fontSize = 15f, enabled = false)
+                PillButton(
+                    stringResource(Res.string.unlock),
+                    onClick = {},
+                    height = 34.dp,
+                    fontSize = 15f,
+                    enabled = false,
+                )
             }
         } else {
             Row(
@@ -82,8 +115,17 @@ fun SettingsTab(
                     .borderBottom(KlokkBorderColor()),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text("Klokk Plus", color = KlokkTextPrimary, fontSize = 17.sp, modifier = Modifier.weight(1f))
-                Text("Active", color = KlokkTextSecondary, fontSize = 17.sp)
+                Text(
+                    stringResource(Res.string.plus_title),
+                    color = KlokkTextPrimary,
+                    fontSize = 17.sp,
+                    modifier = Modifier.weight(1f),
+                )
+                Text(
+                    stringResource(Res.string.active),
+                    color = KlokkTextSecondary,
+                    fontSize = 17.sp,
+                )
             }
         }
 
@@ -101,15 +143,22 @@ fun SettingsTab(
                 },
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("Screensaver", color = KlokkTextPrimary, fontSize = 17.sp, modifier = Modifier.weight(1f))
             Text(
-                if (plus) state.saverShow.label else "Plus",
+                stringResource(Res.string.screensaver),
+                color = KlokkTextPrimary,
+                fontSize = 17.sp,
+                modifier = Modifier.weight(1f),
+            )
+            Text(
+                if (plus) saverShowName(state.saverShow) else stringResource(Res.string.plus_badge),
                 color = KlokkTextSecondary,
                 fontSize = 17.sp,
             )
         }
         Text(
-            if (plus) "Tap the clock to start." else "Included with Klokk Plus.",
+            stringResource(
+                if (plus) Res.string.saver_hint_plus else Res.string.included_plus,
+            ),
             color = KlokkTextSecondary,
             fontSize = 13.sp,
             lineHeight = 18.sp,
@@ -124,15 +173,26 @@ fun SettingsTab(
                 .tap { state.gate(PaywallReason.WIDGETS) {} },
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("Widgets", color = KlokkTextPrimary, fontSize = 17.sp, modifier = Modifier.weight(1f))
             Text(
-                if (plus) "Home & Lock Screen" else "Plus",
+                stringResource(Res.string.widgets),
+                color = KlokkTextPrimary,
+                fontSize = 17.sp,
+                modifier = Modifier.weight(1f),
+            )
+            Text(
+                if (plus) {
+                    stringResource(Res.string.widgets_value_plus)
+                } else {
+                    stringResource(Res.string.plus_badge)
+                },
                 color = KlokkTextSecondary,
                 fontSize = 17.sp,
             )
         }
         Text(
-            if (plus) "Hold your Home or Lock Screen to add." else "Included with Klokk Plus.",
+            stringResource(
+                if (plus) Res.string.widgets_hint_plus else Res.string.included_plus,
+            ),
             color = KlokkTextSecondary,
             fontSize = 13.sp,
             lineHeight = 18.sp,
@@ -140,7 +200,10 @@ fun SettingsTab(
 
         // Widget previews
         Column(modifier = Modifier.padding(top = 18.dp)) {
-            WidgetCard(title = "Now", tag = "Small") {
+            WidgetCard(
+                title = stringResource(Res.string.widget_now),
+                tag = stringResource(Res.string.widget_small),
+            ) {
                 Box(
                     modifier = Modifier
                         .size(158.dp)
@@ -163,7 +226,11 @@ fun SettingsTab(
 
             Spacer(Modifier.height(24.dp))
 
-            WidgetCard(title = "Time", tag = "Medium", horizontalPadding = 12.dp) {
+            WidgetCard(
+                title = stringResource(Res.string.widget_time),
+                tag = stringResource(Res.string.widget_medium),
+                horizontalPadding = 12.dp,
+            ) {
                 Box(
                     modifier = Modifier
                         .width(338.dp)
@@ -178,7 +245,11 @@ fun SettingsTab(
 
             Spacer(Modifier.height(24.dp))
 
-            WidgetCard(title = "Next alarm", tag = "Lock Screen", horizontalPadding = 12.dp) {
+            WidgetCard(
+                title = stringResource(Res.string.widget_next_alarm),
+                tag = stringResource(Res.string.widget_lock_screen),
+                horizontalPadding = 12.dp,
+            ) {
                 Column(
                     modifier = Modifier
                         .width(338.dp)
@@ -188,7 +259,7 @@ fun SettingsTab(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        KlokkFormat.lockDate(now),
+                        lockDate(now),
                         color = Color.White.copy(alpha = 0.85f),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Medium,
@@ -219,7 +290,7 @@ fun SettingsTab(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            "NEXT ALARM",
+                            stringResource(Res.string.widget_next_alarm_pill),
                             color = KlokkTextPrimary,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
