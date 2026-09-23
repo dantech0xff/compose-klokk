@@ -17,8 +17,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
@@ -238,6 +241,7 @@ fun App() {
         Column(
             modifier = Modifier
                 .align(Alignment.TopCenter)
+                .windowInsetsPadding(WindowInsets.safeDrawing)
                 .widthIn(max = 402.dp)
                 .fillMaxWidth()
                 .fillMaxHeight(),
@@ -533,7 +537,9 @@ private fun onSecond(state: KlokkState, nowMs: Long) {
         alarm.on &&
             alarm.h == local.hour &&
             alarm.m == local.minute &&
-            alarm.id != state.rungAlarmId &&
+            // Suppress only the already-rung occurrence (id + minute); the
+            // same alarm may fire again on its next scheduled day.
+            (alarm.id != state.rungAlarmId || nowMs / 60_000 != state.rungMinute) &&
             // Alarm instants fall within the same minute as local; the
             // (minute, h) match survives a skipped :00 tick — we just also
             // skip alarms already rung for this occurrence.
@@ -545,10 +551,10 @@ private fun onSecond(state: KlokkState, nowMs: Long) {
             val index = state.alarms.indexOf(hit)
             state.alarms[index] = hit.copy(on = false)
         }
-        if (state.overlay != KlokkOverlay.RING) {
-            state.rungAlarmId = hit.id
-            state.startRing(RingKind.ALARM, hit.id, nowMs)
-        }
+        state.rungAlarmId = hit.id
+        state.rungMinute = nowMs / 60_000
+        // Queues behind an active ring instead of dropping the occurrence.
+        state.startRing(RingKind.ALARM, hit.id, nowMs)
     }
 }
 
@@ -594,10 +600,12 @@ private fun heroMatrix(
                 0L
             }
             val minutes = (elapsed / 60000L).toInt()
-            val digits = if (minutes >= 100) {
-                KlokkFormat.hm(minutes / 60, minutes % 60)
-            } else {
-                KlokkFormat.hm(minutes, ((elapsed / 1000L) % 60L).toInt())
+            val digits = when {
+                // mm:ss until 99:59, hh:mm after — the four-digit grid
+                // saturates at 99:59 rather than growing a third hour digit.
+                minutes / 60 > 99 -> KlokkFormat.hm(99, 59)
+                minutes >= 100 -> KlokkFormat.hm(minutes / 60, minutes % 60)
+                else -> KlokkFormat.hm(minutes, ((elapsed / 1000L) % 60L).toInt())
             }
             KlokkMatrices.digitsMatrix(
                 digits,

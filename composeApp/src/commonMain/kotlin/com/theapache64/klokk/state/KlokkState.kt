@@ -58,6 +58,7 @@ class KlokkState {
     var editingId by mutableStateOf<Int?>(null)
     var nextAlarmId = 3
     var rungAlarmId by mutableStateOf(-1)
+    var rungMinute by mutableStateOf(-1L)
 
     // cities
     val cities = mutableStateListOf<City>()
@@ -88,8 +89,15 @@ class KlokkState {
 
     var nowMs by mutableStateOf(kotlin.time.Clock.System.now().toEpochMilliseconds())
 
+    // Due ring events that arrived while another ring was up, FIFO.
+    private val ringQueue = mutableListOf<Pair<RingKind, Int?>>()
+
     fun startRing(kind: RingKind, id: Int?, nowMs: Long) {
-        if (overlay == KlokkOverlay.RING) return
+        if (overlay == KlokkOverlay.RING) {
+            val event = kind to id
+            if (ringQueue.lastOrNull() != event) ringQueue.add(event)
+            return
+        }
         overlayTs = nowMs
         overlay = KlokkOverlay.RING
         ringKind = kind
@@ -99,6 +107,15 @@ class KlokkState {
         paywall = null
     }
 
+    private fun pumpRing(nowMs: Long) {
+        val next = ringQueue.removeFirstOrNull() ?: return
+        overlayTs = nowMs
+        overlay = KlokkOverlay.RING
+        ringKind = next.first
+        ringId = next.second
+        ringOn = true
+    }
+
     fun stopRing() {
         if (ringKind == RingKind.TIMER) {
             tmRunning = false
@@ -106,12 +123,14 @@ class KlokkState {
             tmRemaining = tmTotal
         }
         overlay = null
+        pumpRing(kotlin.time.Clock.System.now().toEpochMilliseconds())
     }
 
     fun snooze(nowMs: Long) {
         overlay = null
         snoozeUntil = nowMs + 9 * 60_000
         tab = KlokkTab.ALARM
+        pumpRing(nowMs)
     }
 
     fun openSaver(nowMs: Long) {

@@ -140,7 +140,7 @@ fun ClockTab(state: KlokkState, now: Instant) {
         }
 
         state.cities.forEachIndexed { i, city ->
-            key(city.tz) {
+            key(city.name) {
                 CityRow(
                     city = city,
                     index = i,
