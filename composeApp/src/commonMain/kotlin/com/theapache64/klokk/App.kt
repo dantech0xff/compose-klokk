@@ -57,6 +57,7 @@ import com.theapache64.klokk.theme.KlokkBackground
 import com.theapache64.klokk.theme.KlokkTabInactive
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.theme.KlokkTextSecondary
+import com.theapache64.klokk.theme.KlokkSystemBarStyle
 import com.theapache64.klokk.theme.LocalKlokkColors
 import com.theapache64.klokk.theme.darkKlokkColors
 import com.theapache64.klokk.theme.lightKlokkColors
@@ -216,13 +217,14 @@ fun App() {
     val bodyAlpha = if (state.focusRunning) 0f else 1f
 
     val systemDark = isSystemInDarkTheme()
-    val klokkColors = when (state.themeMode) {
-        ThemeMode.SYSTEM -> if (systemDark) darkKlokkColors() else lightKlokkColors()
-        ThemeMode.LIGHT -> lightKlokkColors()
-        ThemeMode.DARK -> darkKlokkColors()
+    val dark = when (state.themeMode) {
+        ThemeMode.SYSTEM -> systemDark
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
     }
+    KlokkSystemBarStyle(dark)
 
-    CompositionLocalProvider(LocalKlokkColors provides klokkColors) {
+    CompositionLocalProvider(LocalKlokkColors provides if (dark) darkKlokkColors() else lightKlokkColors()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
