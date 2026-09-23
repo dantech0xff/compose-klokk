@@ -510,30 +510,35 @@ private fun onSecond(state: KlokkState, nowMs: Long) {
         return
     }
 
-    if (state.snoozeUntil > 0) {
-        if (nowMs >= state.snoozeUntil) {
-            state.snoozeUntil = 0L
-            state.startRing(RingKind.ALARM, null, nowMs)
-        }
+    if (state.snoozeUntil > 0 && nowMs >= state.snoozeUntil) {
+        state.snoozeUntil = 0L
+        state.startRing(RingKind.ALARM, null, nowMs)
         return
     }
 
     val tz = TimeZone.currentSystemDefault()
     val local = Instant.fromEpochMilliseconds(nowMs).toLocalDateTime(tz)
-    if (local.second != 0) return
     val day = (local.dayOfWeek.ordinal + 1) % 7
     val hit = state.alarms.firstOrNull { alarm ->
         alarm.on &&
             alarm.h == local.hour &&
             alarm.m == local.minute &&
-            (alarm.days.isEmpty() || alarm.days.getOrElse(day) { false })
+            alarm.id != state.rungAlarmId &&
+            // Alarm instants fall within the same minute as local; the
+            // (minute, h) match survives a skipped :00 tick — we just also
+            // skip alarms already rung for this occurrence.
+            local.second < 30 &&
+            (alarm.days.none { it } || alarm.days.getOrElse(day) { false })
     }
     if (hit != null) {
-        if (hit.days.isEmpty()) {
+        if (hit.days.none { it }) {
             val index = state.alarms.indexOf(hit)
             state.alarms[index] = hit.copy(on = false)
         }
-        state.startRing(RingKind.ALARM, hit.id, nowMs)
+        if (state.overlay != KlokkOverlay.RING) {
+            state.rungAlarmId = hit.id
+            state.startRing(RingKind.ALARM, hit.id, nowMs)
+        }
     }
 }
 

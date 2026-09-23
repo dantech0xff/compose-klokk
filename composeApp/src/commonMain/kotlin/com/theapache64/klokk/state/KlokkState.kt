@@ -70,6 +70,7 @@ class KlokkState {
     )
     var editingId by mutableStateOf<Int?>(null)
     var nextAlarmId = 3
+    var rungAlarmId by mutableStateOf(-1)
 
     // cities
     val cities = mutableStateListOf<City>()

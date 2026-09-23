@@ -39,7 +39,13 @@ fun FocusTab(state: KlokkState, now: Instant) {
             },
             bold = true,
         )
-        val total = state.focusSessions.sumOf { it.ms }
+        val tz = kotlinx.datetime.TimeZone.currentSystemDefault()
+        val today = now.toLocalDateTime(tz).date
+        val total = state.focusSessions
+            .filter {
+                Instant.fromEpochMilliseconds(it.startMs).toLocalDateTime(tz).date == today
+            }
+            .sumOf { it.ms }
         val note = when {
             state.focusRunning -> "Counting up until you end it"
             total > 0 -> "Today · ${KlokkFormat.fmtDur(total)}"

@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -125,12 +126,14 @@ fun ClockTab(state: KlokkState, now: Instant) {
         }
 
         state.cities.forEachIndexed { i, city ->
-            CityRow(
-                city = city,
-                index = i,
-                state = state,
-                now = now,
-            )
+            key(city.tz) {
+                CityRow(
+                    city = city,
+                    index = i,
+                    state = state,
+                    now = now,
+                )
+            }
         }
     }
 }

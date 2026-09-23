@@ -77,8 +77,9 @@ object KlokkFormat {
 
     /** "in 2d 3h" / "in 7h 20m" / "in 45m" */
     fun relTime(ms: Long): String {
-        val h = floor(ms / 3600000.0).toInt()
-        val m = ((ms % 3600000) / 60000.0).roundToInt()
+        val totalM = (ms / 60000.0).roundToInt()
+        val h = totalM / 60
+        val m = totalM % 60
         return when {
             h >= 48 -> "in ${h / 24}d ${h % 24}h"
             h > 0 -> if (m > 0) "in ${h}h ${m}m" else "in ${h}h"
