@@ -28,7 +28,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.theapache64.klokk.theme.KlokkBorderStrong
+import com.theapache64.klokk.theme.KlokkOnPrimary
 import com.theapache64.klokk.theme.KlokkTextPrimary
+import com.theapache64.klokk.theme.KlokkTextSecondary
+import com.theapache64.klokk.theme.KlokkToggleOff
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -64,7 +68,7 @@ fun PillButton(
     ) {
         Text(
             text,
-            color = Color.Black.copy(alpha = alpha),
+            color = KlokkOnPrimary.copy(alpha = alpha),
             fontSize = fontSize.sp,
             fontWeight = FontWeight.Medium,
         )
@@ -86,14 +90,14 @@ fun CircleActionButton(
             .clip(CircleShape)
             .background(if (filled) KlokkTextPrimary else Color.Transparent)
             .then(
-                if (filled) Modifier else Modifier.border(1.dp, Color(0x38ffffff), CircleShape)
+                if (filled) Modifier else Modifier.border(1.dp, KlokkBorderStrong, CircleShape)
             )
             .tap(onClick),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             label,
-            color = if (filled) Color.Black else KlokkTextPrimary,
+            color = if (filled) KlokkOnPrimary else KlokkTextPrimary,
             fontSize = 15.sp,
             fontWeight = if (bold) FontWeight.Bold else FontWeight.Medium,
             letterSpacing = if (bold) 0.6.sp else 0.sp,
@@ -120,7 +124,7 @@ fun KlokkToggle(checked: Boolean, onToggle: () -> Unit, modifier: Modifier = Mod
             .width(46.dp)
             .height(28.dp)
             .clip(RoundedCornerShape(14.dp))
-            .background(if (checked) KlokkTextPrimary else Color(0xff2a2a2a))
+            .background(if (checked) KlokkTextPrimary else KlokkToggleOff)
             .tap(onToggle)
             .padding(2.dp),
         contentAlignment = if (checked) Alignment.CenterEnd else Alignment.CenterStart,
@@ -129,7 +133,7 @@ fun KlokkToggle(checked: Boolean, onToggle: () -> Unit, modifier: Modifier = Mod
             modifier = Modifier
                 .size(24.dp)
                 .clip(CircleShape)
-                .background(if (checked) Color.Black else Color(0xff8b8b8b))
+                .background(if (checked) KlokkOnPrimary else KlokkTextSecondary)
         )
     }
 }
@@ -137,6 +141,7 @@ fun KlokkToggle(checked: Boolean, onToggle: () -> Unit, modifier: Modifier = Mod
 /** The tiny chevrons shown above/below the hero grid while it is scrubbable. */
 @Composable
 fun ScrubTriangle(up: Boolean, modifier: Modifier = Modifier) {
+    val triangleColor = KlokkTextSecondary
     Canvas(modifier = modifier.size(8.dp, 5.dp)) {
         val p = Path()
         if (up) {
@@ -149,7 +154,7 @@ fun ScrubTriangle(up: Boolean, modifier: Modifier = Modifier) {
             p.lineTo(this.size.width / 2f, this.size.height)
         }
         p.close()
-        drawPath(p, Color(0xff8b8b8b))
+        drawPath(p, triangleColor)
     }
 }
 

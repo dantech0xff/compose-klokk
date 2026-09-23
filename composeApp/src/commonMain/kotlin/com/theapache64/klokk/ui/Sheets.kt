@@ -43,6 +43,7 @@ import com.theapache64.klokk.state.KlokkSheet
 import com.theapache64.klokk.state.KlokkState
 import com.theapache64.klokk.state.PaywallReason
 import com.theapache64.klokk.theme.KlokkBackground
+import com.theapache64.klokk.theme.KlokkBorderStrong
 import com.theapache64.klokk.theme.KlokkField
 import com.theapache64.klokk.theme.KlokkSurface
 import com.theapache64.klokk.theme.KlokkTextPrimary
@@ -112,7 +113,7 @@ private fun SheetFrame(
                         .width(36.dp)
                         .height(5.dp)
                         .clip(RoundedCornerShape(3.dp))
-                        .background(Color(0x2effffff))
+                        .background(KlokkBorderStrong)
                 )
                 Row(
                     modifier = Modifier
@@ -166,7 +167,7 @@ fun CitySheet(state: KlokkState, now: Instant) {
                     if (state.citySearch.isEmpty()) {
                         Text(
                             stringResource(Res.string.search_city),
-                            color = Color(0xff5f5f5f),
+                            color = KlokkTextSecondary,
                             fontSize = 17.sp,
                         )
                     }

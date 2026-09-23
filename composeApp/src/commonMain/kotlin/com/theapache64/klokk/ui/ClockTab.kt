@@ -42,6 +42,7 @@ import com.theapache64.klokk.state.KlokkState
 import com.theapache64.klokk.state.PaywallReason
 import com.theapache64.klokk.theme.KlokkBackground
 import com.theapache64.klokk.theme.KlokkBorder
+import com.theapache64.klokk.theme.KlokkOnPrimary
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.generated.resources.Res
 import com.theapache64.klokk.generated.resources.add_city
@@ -153,6 +154,7 @@ fun ClockTab(state: KlokkState, now: Instant) {
 }
 
 /** Thin top divider used by the list rows (design: rgba(255,255,255,.08)). */
+@Composable
 fun Modifier.borderTop(color: Color = KlokkBorder): Modifier = this.drawBehind {
     drawLine(
         color,
@@ -195,7 +197,7 @@ private fun CityRow(
             Spacer(Modifier.weight(1f))
             Text(
                 stringResource(Res.string.delete),
-                color = androidx.compose.ui.graphics.Color.Black,
+                color = KlokkOnPrimary,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
             )

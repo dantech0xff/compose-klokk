@@ -14,12 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.theapache64.klokk.theme.CodGray
+import com.theapache64.klokk.theme.LocalKlokkColors
 import kotlinx.coroutines.launch
 import kotlin.math.cos
 import kotlin.math.floor
@@ -48,9 +47,6 @@ object KlokkCellMode {
     /** Jump to the target without a transform transition. */
     const val SNAP = 2
 }
-
-private val HAND_COLOR = Color.White
-private val FACE_COLOR = CodGray
 
 /**
  * Dumb grid of two-hand clocks, fed by a rows×cols [matrix].
@@ -113,19 +109,21 @@ private fun KlokkCellView(
         animationSpec = tween(durationMillis = 800, easing = LinearEasing),
         label = "handAlpha"
     )
+    val faceColor = LocalKlokkColors.current.clockFace
+    val handColor = LocalKlokkColors.current.clockHand
 
     Canvas(modifier = modifier) {
         val needleWidth = size.minDimension * 0.05f
         val radius = size.minDimension / 2f
 
-        drawCircle(color = FACE_COLOR, radius = radius)
+        drawCircle(color = faceColor, radius = radius)
 
         val radius2 = (radius - needleWidth / 2f) * 0.98f
         val style = Stroke(width = needleWidth, cap = StrokeCap.Round)
 
         val radOne = handOne.value * Math.PI / 180
         drawLine(
-            color = HAND_COLOR,
+            color = handColor,
             start = center,
             end = Offset(
                 x = center.x + radius2 * sin(radOne).toFloat(),
@@ -138,7 +136,7 @@ private fun KlokkCellView(
 
         val radTwo = handTwo.value * Math.PI / 180
         drawLine(
-            color = HAND_COLOR,
+            color = handColor,
             start = center,
             end = Offset(
                 x = center.x + radius2 * sin(radTwo).toFloat(),

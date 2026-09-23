@@ -37,6 +37,8 @@ import com.theapache64.klokk.state.Alarm
 import com.theapache64.klokk.state.KlokkState
 import com.theapache64.klokk.state.RingKind
 import com.theapache64.klokk.theme.KlokkBorder
+import com.theapache64.klokk.theme.KlokkBorderStrong
+import com.theapache64.klokk.theme.KlokkOnPrimary
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.theme.KlokkTextSecondary
 import com.theapache64.klokk.util.KlokkFormat
@@ -47,7 +49,8 @@ import org.jetbrains.compose.resources.stringResource
 
 private val DAY_ORDER = listOf(1, 2, 3, 4, 5, 6, 0)
 
-fun Modifier.borderBottom(color: Color = Color(0x1fffffff)): Modifier = this.drawBehind {
+@Composable
+fun Modifier.borderBottom(color: Color = KlokkBorder): Modifier = this.drawBehind {
     drawLine(
         color,
         Offset(0f, size.height),
@@ -161,7 +164,7 @@ private fun AlarmEditor(state: KlokkState, alarm: Alarm) {
                         .background(if (on) KlokkTextPrimary else Color.Transparent)
                         .border(
                             1.dp,
-                            if (on) KlokkTextPrimary else Color(0x2effffff),
+                            if (on) KlokkTextPrimary else KlokkBorderStrong,
                             CircleShape,
                         )
                         .tap {
@@ -175,7 +178,7 @@ private fun AlarmEditor(state: KlokkState, alarm: Alarm) {
                 ) {
                     Text(
                         chipNames[day],
-                        color = if (on) Color.Black else KlokkTextSecondary,
+                        color = if (on) KlokkOnPrimary else KlokkTextSecondary,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium,
                     )
@@ -208,7 +211,7 @@ private fun AlarmEditor(state: KlokkState, alarm: Alarm) {
                     if (alarm.label.isEmpty()) {
                         Text(
                             stringResource(Res.string.label),
-                            color = Color(0xff5f5f5f),
+                            color = KlokkTextSecondary,
                             fontSize = 17.sp,
                         )
                     }
