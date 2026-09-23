@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -50,10 +52,14 @@ import com.theapache64.klokk.state.KlokkState
 import com.theapache64.klokk.state.KlokkTab
 import com.theapache64.klokk.state.PaywallReason
 import com.theapache64.klokk.state.RingKind
+import com.theapache64.klokk.state.ThemeMode
 import com.theapache64.klokk.theme.KlokkBackground
 import com.theapache64.klokk.theme.KlokkTabInactive
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.theme.KlokkTextSecondary
+import com.theapache64.klokk.theme.LocalKlokkColors
+import com.theapache64.klokk.theme.darkKlokkColors
+import com.theapache64.klokk.theme.lightKlokkColors
 import com.theapache64.klokk.ui.AlarmTab
 import com.theapache64.klokk.ui.CitySheet
 import com.theapache64.klokk.ui.ClockTab
@@ -209,6 +215,14 @@ fun App() {
     }
     val bodyAlpha = if (state.focusRunning) 0f else 1f
 
+    val systemDark = isSystemInDarkTheme()
+    val klokkColors = when (state.themeMode) {
+        ThemeMode.SYSTEM -> if (systemDark) darkKlokkColors() else lightKlokkColors()
+        ThemeMode.LIGHT -> lightKlokkColors()
+        ThemeMode.DARK -> darkKlokkColors()
+    }
+
+    CompositionLocalProvider(LocalKlokkColors provides klokkColors) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -451,6 +465,7 @@ fun App() {
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 76.dp),
         )
+    }
     }
 }
 

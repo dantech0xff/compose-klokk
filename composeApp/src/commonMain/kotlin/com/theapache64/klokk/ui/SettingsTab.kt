@@ -26,13 +26,23 @@ import com.theapache64.klokk.composable.KlokkGrid
 import com.theapache64.klokk.state.KlokkSheet
 import com.theapache64.klokk.state.KlokkState
 import com.theapache64.klokk.state.PaywallReason
+import com.theapache64.klokk.state.ThemeMode
+import androidx.compose.runtime.CompositionLocalProvider
 import com.theapache64.klokk.theme.KlokkBackground
+import com.theapache64.klokk.theme.KlokkClockFace
+import com.theapache64.klokk.theme.KlokkField
+import com.theapache64.klokk.theme.KlokkOnPrimary
 import com.theapache64.klokk.theme.KlokkSurface
+import com.theapache64.klokk.theme.LocalKlokkColors
+import com.theapache64.klokk.theme.darkKlokkColors
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.theme.KlokkTextSecondary
-import com.theapache64.klokk.theme.CodGray
 import com.theapache64.klokk.generated.resources.Res
 import com.theapache64.klokk.generated.resources.active
+import com.theapache64.klokk.generated.resources.appearance
+import com.theapache64.klokk.generated.resources.appearance_dark
+import com.theapache64.klokk.generated.resources.appearance_light
+import com.theapache64.klokk.generated.resources.appearance_system
 import com.theapache64.klokk.generated.resources.included_plus
 import com.theapache64.klokk.generated.resources.plus_badge
 import com.theapache64.klokk.generated.resources.plus_card_sub
@@ -72,6 +82,47 @@ fun SettingsTab(
     val minDeg = local.minute * 6f + local.second * 0.1f
 
     Column {
+        // Appearance
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 6.dp)
+                .height(52.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                stringResource(Res.string.appearance),
+                color = KlokkTextPrimary,
+                fontSize = 17.sp,
+                modifier = Modifier.weight(1f),
+            )
+            Row(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(KlokkField)
+                    .padding(2.dp),
+            ) {
+                ThemeMode.entries.forEach { mode ->
+                    val selected = state.themeMode == mode
+                    Text(
+                        when (mode) {
+                            ThemeMode.SYSTEM -> stringResource(Res.string.appearance_system)
+                            ThemeMode.LIGHT -> stringResource(Res.string.appearance_light)
+                            ThemeMode.DARK -> stringResource(Res.string.appearance_dark)
+                        },
+                        color = if (selected) KlokkOnPrimary else KlokkTextSecondary,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(if (selected) KlokkTextPrimary else Color.Transparent)
+                            .tap { state.themeMode = mode }
+                            .padding(horizontal = 14.dp, vertical = 6.dp),
+                    )
+                }
+            }
+        }
+
         if (!plus) {
             Row(
                 modifier = Modifier
@@ -112,7 +163,7 @@ fun SettingsTab(
                     .fillMaxWidth()
                     .height(52.dp)
                     .padding(top = 6.dp)
-                    .borderBottom(KlokkBorderColor()),
+                    .borderBottom(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -204,6 +255,7 @@ fun SettingsTab(
                 title = stringResource(Res.string.widget_now),
                 tag = stringResource(Res.string.widget_small),
             ) {
+                CompositionLocalProvider(LocalKlokkColors provides darkKlokkColors()) {
                 Box(
                     modifier = Modifier
                         .size(158.dp)
@@ -215,12 +267,13 @@ fun SettingsTab(
                         hourDeg = hourDeg,
                         minDeg = minDeg,
                         size = 126.dp,
-                        faceColor = CodGray,
+                        faceColor = KlokkClockFace,
                         handColor = KlokkTextPrimary,
                         handWidth = 4.dp,
                         hourLen = 38.dp,
                         minLen = 56.dp,
                     )
+                }
                 }
             }
 
@@ -231,6 +284,7 @@ fun SettingsTab(
                 tag = stringResource(Res.string.widget_medium),
                 horizontalPadding = 12.dp,
             ) {
+                CompositionLocalProvider(LocalKlokkColors provides darkKlokkColors()) {
                 Box(
                     modifier = Modifier
                         .width(338.dp)
@@ -241,6 +295,7 @@ fun SettingsTab(
                 ) {
                     KlokkGrid(timeMatrix, 17.dp, dim = isNight)
                 }
+                }
             }
 
             Spacer(Modifier.height(24.dp))
@@ -250,6 +305,7 @@ fun SettingsTab(
                 tag = stringResource(Res.string.widget_lock_screen),
                 horizontalPadding = 12.dp,
             ) {
+                CompositionLocalProvider(LocalKlokkColors provides darkKlokkColors()) {
                 Column(
                     modifier = Modifier
                         .width(338.dp)
@@ -319,12 +375,11 @@ fun SettingsTab(
                         )
                     }
                 }
+                }
             }
         }
     }
 }
-
-private fun KlokkBorderColor() = Color(0x14ffffff)
 
 @Composable
 private fun WidgetCard(

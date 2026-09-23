@@ -178,4 +178,8 @@
     <string name="ring_time_up">Hết giờ</string>
     <string name="ring_hint_alarm">Vuốt lên để tắt · chạm để báo lại</string>
     <string name="ring_hint_timer">Vuốt lên để tắt</string>
+    <string name="appearance">Giao diện</string>
+    <string name="appearance_system">Tự động</string>
+    <string name="appearance_light">Sáng</string>
+    <string name="appearance_dark">Tối</string>
 </resources>
