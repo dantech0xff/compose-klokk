@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.theapache64.klokk.theme.LocalKlokkColors
 import kotlinx.coroutines.launch
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
@@ -121,7 +122,7 @@ private fun KlokkCellView(
         val radius2 = (radius - needleWidth / 2f) * 0.98f
         val style = Stroke(width = needleWidth, cap = StrokeCap.Round)
 
-        val radOne = handOne.value * Math.PI / 180
+        val radOne = handOne.value * PI / 180
         drawLine(
             color = handColor,
             start = center,
@@ -134,7 +135,7 @@ private fun KlokkCellView(
             cap = StrokeCap.Round,
         )
 
-        val radTwo = handTwo.value * Math.PI / 180
+        val radTwo = handTwo.value * PI / 180
         drawLine(
             color = handColor,
             start = center,

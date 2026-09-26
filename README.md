@@ -1,11 +1,20 @@
-# A fork from Klokk of theapache64, customized by Dan Tech
-
 # 🕒 klokk
 
-> A kinetic wall clock app — iOS-style redesign, built with Compose Multiplatform.
+> A kinetic wall clock app — built with Compose Multiplatform for iOS, Android
+> and Desktop.
 
 A grid of tiny analog clocks animates in sync to form digits, ripples and
-waves — now as a full clock app with five tabs.
+waves — a full clock app with five tabs.
+
+This project began as a fork of
+[theapache64's klokk](https://github.com/theapache64/klokk), a Compose Desktop
+experiment. It has since grown far beyond the original into a standalone
+multiplatform app — alarms, timer, focus sessions, a paywall and localization —
+and now lives on its own, outside the fork network.
+
+## 📱 Screenshots
+
+<img src="screenshot-ios.png" width="360" alt="klokk on iOS — Clock tab" />
 
 ## ✨ Features
 
@@ -38,7 +47,9 @@ waves — now as a full clock app with five tabs.
 
 ## ✍️ Author
 
-👤 **theapache64** (original) — forked and customized by **Dan Tech**
+👤 **Dan Tech** — maintainer of this independent project.
+
+Based on the original desktop-only klokk by **theapache64**:
 
 * Twitter: <a href="https://twitter.com/theapache64" target="_blank">@theapache64</a>
 * Email: theapache64@gmail.com
