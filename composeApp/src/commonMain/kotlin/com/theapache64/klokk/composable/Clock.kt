@@ -25,6 +25,7 @@ import com.theapache64.klokk.model.ClockData
 import com.theapache64.klokk.movement.core.Movement
 import com.theapache64.klokk.theme.CodGray
 import kotlinx.coroutines.launch
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -53,7 +54,7 @@ fun Clock(
 
     LaunchedEffect(timeSign) {
         launch {
-            val needleOneRadian = (needleOneDegree * Math.PI / 180).toFloat()
+            val needleOneRadian = (needleOneDegree * PI / 180).toFloat()
             animatableRadiantNeedleOne.animateTo(
                 needleOneRadian,
                 animationSpec = tween(durationMillis = durationInMillis, easing = easing)
@@ -61,7 +62,7 @@ fun Clock(
         }
 
         launch {
-            val needleTwoRadian = (needleTwoDegree * Math.PI / 180).toFloat()
+            val needleTwoRadian = (needleTwoDegree * PI / 180).toFloat()
             animatableRadianNeedleTwo.animateTo(
                 needleTwoRadian,
                 animationSpec = tween(durationMillis = durationInMillis, easing = easing)

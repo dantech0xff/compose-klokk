@@ -36,7 +36,7 @@ class TimeMatrixGenerator(data: Movement.Time) : MatrixGenerator<Movement.Time>(
                 7 -> SevenMatrix
                 8 -> EightMatrix
                 9 -> NineMatrix
-                else -> throw IllegalAccessException("Matrix not defined for $digit")
+                else -> throw IllegalArgumentException("Matrix not defined for $digit")
             }
 
             return verifyIntegrityAndReturn(digitMatrix.getMatrix())

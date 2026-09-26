@@ -33,6 +33,7 @@ import com.theapache64.klokk.theme.KlokkOnPrimary
 import com.theapache64.klokk.theme.KlokkTextPrimary
 import com.theapache64.klokk.theme.KlokkTextSecondary
 import com.theapache64.klokk.theme.KlokkToggleOff
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -176,7 +177,7 @@ fun AnalogDial(
         val radius = this.size.minDimension / 2f
         drawCircle(faceColor, radius)
         val w = handWidth.toPx()
-        val hourRad = hourDeg * Math.PI / 180
+        val hourRad = hourDeg * PI / 180
         drawLine(
             handColor, center,
             Offset(
@@ -185,7 +186,7 @@ fun AnalogDial(
             ),
             strokeWidth = w, cap = StrokeCap.Round,
         )
-        val minRad = minDeg * Math.PI / 180
+        val minRad = minDeg * PI / 180
         drawLine(
             handColor, center,
             Offset(

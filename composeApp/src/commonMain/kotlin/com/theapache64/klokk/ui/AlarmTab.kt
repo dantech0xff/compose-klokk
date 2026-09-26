@@ -99,9 +99,11 @@ fun AlarmTab(state: KlokkState) {
                     KlokkToggle(
                         checked = alarm.on,
                         onToggle = {
-                            state.alarms.replaceAll {
-                                if (it.id == alarm.id) it.copy(on = !it.on) else it
-                            }
+                            state.alarms.indexOfFirst { it.id == alarm.id }
+                                .takeIf { it >= 0 }
+                                ?.let { i ->
+                                    state.alarms[i] = state.alarms[i].copy(on = !state.alarms[i].on)
+                                }
                         },
                     )
                 }
@@ -168,11 +170,14 @@ private fun AlarmEditor(state: KlokkState, alarm: Alarm) {
                             CircleShape,
                         )
                         .tap {
-                            state.alarms.replaceAll {
-                                if (it.id == alarm.id) {
-                                    it.copy(days = it.days.mapIndexed { k, v -> if (k == day) !v else v })
-                                } else it
-                            }
+                            state.alarms.indexOfFirst { it.id == alarm.id }
+                                .takeIf { it >= 0 }
+                                ?.let { i ->
+                                    val a = state.alarms[i]
+                                    state.alarms[i] = a.copy(
+                                        days = a.days.mapIndexed { k, v -> if (k == day) !v else v }
+                                    )
+                                }
                         },
                     contentAlignment = Alignment.Center,
                 ) {
@@ -193,9 +198,11 @@ private fun AlarmEditor(state: KlokkState, alarm: Alarm) {
         BasicTextField(
             value = alarm.label,
             onValueChange = { v ->
-                state.alarms.replaceAll {
-                    if (it.id == alarm.id) it.copy(label = v) else it
-                }
+                state.alarms.indexOfFirst { it.id == alarm.id }
+                    .takeIf { it >= 0 }
+                    ?.let { i ->
+                        state.alarms[i] = state.alarms[i].copy(label = v)
+                    }
             },
             textStyle = TextStyle(
                 color = KlokkTextPrimary,
