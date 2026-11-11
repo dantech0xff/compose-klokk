@@ -169,6 +169,11 @@
     <string name="cta_unlock_plus">Mở khoá Plus</string>
     <string name="cta_unlocking">Đang mở khoá…</string>
     <string name="restore">Khôi phục</string>
+    <string name="manage_subscription">Quản lý gói</string>
+    <string name="purchase_cancelled">Đã hủy mua</string>
+    <string name="purchase_pending">Đang chờ thanh toán</string>
+    <string name="purchase_unavailable">Bản này chưa bật mua hàng</string>
+    <string name="purchase_failed">Mua không thành công</string>
     <string name="terms">Điều khoản</string>
     <string name="privacy">Quyền riêng tư</string>
 

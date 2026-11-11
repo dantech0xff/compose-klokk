@@ -63,7 +63,14 @@ import dev.dantech.klokk.generated.resources.feature_saver_sub
 import dev.dantech.klokk.generated.resources.paywall_not_now
 import dev.dantech.klokk.generated.resources.plus_title
 import dev.dantech.klokk.generated.resources.privacy
+import dev.dantech.klokk.billing.openSubscriptionManagement
+import dev.dantech.klokk.generated.resources.manage_subscription
+import dev.dantech.klokk.generated.resources.purchase_cancelled
+import dev.dantech.klokk.generated.resources.purchase_failed
+import dev.dantech.klokk.generated.resources.purchase_pending
+import dev.dantech.klokk.generated.resources.purchase_unavailable
 import dev.dantech.klokk.generated.resources.restore
+import dev.dantech.klokk.state.PurchaseNotice
 import dev.dantech.klokk.generated.resources.screensaver
 import dev.dantech.klokk.generated.resources.terms
 import dev.dantech.klokk.generated.resources.widgets
@@ -221,7 +228,7 @@ fun PaywallOverlay(
                                 Text(planNote(plan), color = KlokkTextSecondary, fontSize = 13.sp)
                             }
                             Text(
-                                planPrice(plan),
+                                planPrice(plan, state.storePrices[plan]),
                                 color = KlokkTextPrimary,
                                 fontSize = 17.sp,
                                 style = TextStyle(fontFeatureSettings = "tnum"),
@@ -263,6 +270,22 @@ fun PaywallOverlay(
                         .fillMaxWidth()
                         .padding(top = 10.dp),
                 )
+                if (state.purchaseNotice != PurchaseNotice.NONE) {
+                    Text(
+                        when (state.purchaseNotice) {
+                            PurchaseNotice.CANCELLED -> stringResource(Res.string.purchase_cancelled)
+                            PurchaseNotice.PENDING -> stringResource(Res.string.purchase_pending)
+                            PurchaseNotice.FAILED -> state.purchaseDetail
+                                ?: stringResource(Res.string.purchase_failed)
+                            PurchaseNotice.UNAVAILABLE -> stringResource(Res.string.purchase_unavailable)
+                            PurchaseNotice.NONE -> ""
+                        },
+                        color = KlokkTextSecondary,
+                        fontSize = 13.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    )
+                }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -273,8 +296,16 @@ fun PaywallOverlay(
                         stringResource(Res.string.restore),
                         color = KlokkTextSecondary,
                         fontSize = 13.sp,
-                        modifier = Modifier.tap { state.unlock() },
+                        modifier = Modifier.tap { state.restore() },
                     )
+                    if (state.plus) {
+                        Text(
+                            stringResource(Res.string.manage_subscription),
+                            color = KlokkTextSecondary,
+                            fontSize = 13.sp,
+                            modifier = Modifier.tap { openSubscriptionManagement() },
+                        )
+                    }
                     Text(
                         stringResource(Res.string.terms),
                         color = KlokkTextSecondary,

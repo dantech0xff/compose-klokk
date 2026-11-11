@@ -49,6 +49,9 @@ import dev.dantech.klokk.composable.KlokkCellMode
 import dev.dantech.klokk.composable.KlokkGrid
 import dev.dantech.klokk.movement.KlokkMatrices
 import dev.dantech.klokk.movement.SaverShow
+import dev.dantech.klokk.billing.PlusPurchases
+import dev.dantech.klokk.billing.defaultPlusPurchases
+import dev.dantech.klokk.billing.finish
 import dev.dantech.klokk.persist.KlokkRepository
 import dev.dantech.klokk.persist.applyTo
 import dev.dantech.klokk.persist.capture
@@ -132,6 +135,7 @@ private val pageEasing = CubicBezierEasing(0.2f, 0.8f, 0.2f, 1f)
 fun App(
     repository: KlokkRepository = defaultKlokkRepository(),
     scheduler: AlarmScheduler = defaultAlarmScheduler(),
+    purchases: PlusPurchases = defaultPlusPurchases(),
 ) {
     val state = remember { KlokkState() }
     val hydrated = remember { mutableStateOf(false) }
@@ -207,12 +211,19 @@ fun App(
         }
     }
 
-    // Mock purchase settles after 900ms.
+    LaunchedEffect(purchases) {
+        state.storePrices = purchases.loadPrices()
+        purchases.listen { active -> state.onEntitlement(active) }
+    }
+
     LaunchedEffect(state.buying) {
-        if (state.buying) {
-            delay(900)
-            state.onUnlocked()
-        }
+        if (!state.buying) return@LaunchedEffect
+        state.finish(purchases.purchase(state.plan))
+    }
+
+    LaunchedEffect(state.restoring) {
+        if (!state.restoring) return@LaunchedEffect
+        state.finish(purchases.restore())
     }
 
     val now = Instant.fromEpochMilliseconds(state.nowMs)
