@@ -57,6 +57,7 @@ const val DEFAULT_NEXT_ALARM_ID = 3
 class KlokkState {
     var tab by mutableStateOf(KlokkTab.CLOCK)
     var themeMode by mutableStateOf(ThemeMode.SYSTEM)
+    var clockDepth by mutableStateOf(ClockDepth.RAISED)
     var sheet by mutableStateOf<KlokkSheet?>(null)
     var overlay by mutableStateOf<KlokkOverlay?>(null)
     var paywall by mutableStateOf<PaywallReason?>(null)

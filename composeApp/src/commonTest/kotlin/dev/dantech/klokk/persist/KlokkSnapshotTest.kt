@@ -2,6 +2,7 @@ package dev.dantech.klokk.persist
 
 import dev.dantech.klokk.movement.SaverShow
 import dev.dantech.klokk.state.City
+import dev.dantech.klokk.state.ClockDepth
 import dev.dantech.klokk.state.FocusSession
 import dev.dantech.klokk.state.KlokkState
 import dev.dantech.klokk.state.ThemeMode
@@ -48,6 +49,21 @@ class KlokkSnapshotTest {
         assertEquals(ThemeMode.LIGHT, decoded.themeMode)
         assertEquals(listOf(City("Oslo", "Europe/Oslo")), decoded.cities)
         assertEquals(defaultAlarms(), decoded.alarms)
+    }
+
+    @Test
+    fun clockDepthRoundTripsAndASaveWithoutItOpensRaised() {
+        val flat = KlokkSnapshot(clockDepth = ClockDepth.FLAT)
+        val decoded = decodeSnapshot(encodeSnapshot(flat))
+        assertEquals(ClockDepth.FLAT, decoded.clockDepth)
+        val state = KlokkState()
+        decoded.applyTo(state)
+        assertEquals(ClockDepth.FLAT, state.clockDepth)
+        assertEquals(ClockDepth.FLAT, state.capture().clockDepth)
+
+        val legacy = """{"schema":1,"plus":false,"themeMode":"DARK"}"""
+        assertEquals(ClockDepth.RAISED, decodeSnapshot(legacy).clockDepth)
+        assertEquals(ClockDepth.RAISED, KlokkState().clockDepth)
     }
 
     @Test
