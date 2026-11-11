@@ -187,4 +187,6 @@
     <string name="appearance_system">Auto</string>
     <string name="appearance_light">Light</string>
     <string name="appearance_dark">Dark</string>
+    <string name="clock_depth">Clock depth</string>
+    <string name="clock_depth_hint">Raised dials, one shared light. Off is flat.</string>
 </resources>

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.dantech.klokk.composable.KlokkCell
 import dev.dantech.klokk.composable.KlokkGrid
+import dev.dantech.klokk.state.ClockDepth
 import dev.dantech.klokk.state.KlokkSheet
 import dev.dantech.klokk.state.KlokkState
 import dev.dantech.klokk.state.PaywallReason
@@ -43,6 +44,8 @@ import dev.dantech.klokk.generated.resources.appearance
 import dev.dantech.klokk.generated.resources.appearance_dark
 import dev.dantech.klokk.generated.resources.appearance_light
 import dev.dantech.klokk.generated.resources.appearance_system
+import dev.dantech.klokk.generated.resources.clock_depth
+import dev.dantech.klokk.generated.resources.clock_depth_hint
 import dev.dantech.klokk.generated.resources.included_plus
 import dev.dantech.klokk.generated.resources.plus_badge
 import dev.dantech.klokk.generated.resources.plus_card_sub
@@ -121,6 +124,36 @@ fun SettingsTab(
                     )
                 }
             }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
+                Text(
+                    stringResource(Res.string.clock_depth),
+                    color = KlokkTextPrimary,
+                    fontSize = 17.sp,
+                )
+                Text(
+                    stringResource(Res.string.clock_depth_hint),
+                    color = KlokkTextSecondary,
+                    fontSize = 13.sp,
+                )
+            }
+            KlokkToggle(
+                checked = state.clockDepth == ClockDepth.RAISED,
+                onToggle = {
+                    state.clockDepth = if (state.clockDepth == ClockDepth.RAISED) {
+                        ClockDepth.FLAT
+                    } else {
+                        ClockDepth.RAISED
+                    }
+                },
+            )
         }
 
         if (!plus) {

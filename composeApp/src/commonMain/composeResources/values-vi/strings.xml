@@ -187,4 +187,6 @@
     <string name="appearance_system">Tự động</string>
     <string name="appearance_light">Sáng</string>
     <string name="appearance_dark">Tối</string>
+    <string name="clock_depth">Độ sâu</string>
+    <string name="clock_depth_hint">Mặt nổi, một nguồn sáng. Tắt để phẳng.</string>
 </resources>

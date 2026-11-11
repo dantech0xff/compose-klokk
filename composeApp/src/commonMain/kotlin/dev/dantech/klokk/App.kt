@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import dev.dantech.klokk.composable.KlokkCell
 import dev.dantech.klokk.composable.KlokkCellMode
 import dev.dantech.klokk.composable.KlokkGrid
+import dev.dantech.klokk.composable.LocalClockDepth
 import dev.dantech.klokk.movement.KlokkMatrices
 import dev.dantech.klokk.movement.SaverShow
 import dev.dantech.klokk.billing.PlusPurchases
@@ -137,6 +138,7 @@ fun App(
     repository: KlokkRepository = defaultKlokkRepository(),
     scheduler: AlarmScheduler = defaultAlarmScheduler(),
     purchases: PlusPurchases = defaultPlusPurchases(),
+    onReady: (KlokkState) -> Unit = {},
 ) {
     val state = remember { KlokkState() }
     val hydrated = remember { mutableStateOf(false) }
@@ -150,6 +152,7 @@ fun App(
 
     LaunchedEffect(repository) {
         repository.load().applyTo(state)
+        onReady(state)
         hydrated.value = true
         snapshotFlow { state.capture() }
             .distinctUntilChanged()
@@ -283,7 +286,10 @@ fun App(
     }
     KlokkSystemBarStyle(dark)
 
-    CompositionLocalProvider(LocalKlokkColors provides if (dark) darkKlokkColors() else lightKlokkColors()) {
+    CompositionLocalProvider(
+        LocalKlokkColors provides if (dark) darkKlokkColors() else lightKlokkColors(),
+        LocalClockDepth provides state.clockDepth,
+    ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
