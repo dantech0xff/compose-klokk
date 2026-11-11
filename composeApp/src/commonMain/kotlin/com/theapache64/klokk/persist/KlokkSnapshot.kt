@@ -8,12 +8,15 @@ import com.theapache64.klokk.state.FocusSession
 import com.theapache64.klokk.state.KlokkState
 import com.theapache64.klokk.state.ThemeMode
 import com.theapache64.klokk.state.defaultAlarms
+import kotlin.time.Clock
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 /**
  * The document written to disk. [schema] is the version of this shape.
- * Transient UI (the open tab, a running timer, the paywall) is not part of it.
+ * The open tab and the paywall are not part of it.
+ * [timerEndEpochMs] and [snoozeEpochMs] are absolute times so a dead process
+ * can still be woken. Zero means none.
  */
 @Serializable
 data class KlokkSnapshot(
@@ -25,6 +28,9 @@ data class KlokkSnapshot(
     val saverShow: SaverShow = SaverShow.SHUFFLE,
     val focusSessions: List<FocusSession> = emptyList(),
     val plus: Boolean = false,
+    val timerEndEpochMs: Long = 0,
+    val timerTotalSeconds: Int = 300,
+    val snoozeEpochMs: Long = 0,
 ) {
     companion object {
         const val SCHEMA = 1
@@ -65,6 +71,9 @@ fun KlokkState.capture(): KlokkSnapshot = KlokkSnapshot(
     saverShow = saverShow,
     focusSessions = focusSessions.toList(),
     plus = plus,
+    timerEndEpochMs = if (tmRunning && tmEndTs > 0) tmEndTs else 0,
+    timerTotalSeconds = tmTotal,
+    snoozeEpochMs = snoozeUntil,
 )
 
 fun KlokkSnapshot.applyTo(state: KlokkState) {
@@ -78,4 +87,16 @@ fun KlokkSnapshot.applyTo(state: KlokkState) {
     state.focusSessions.clear()
     state.focusSessions.addAll(focusSessions)
     state.plus = plus
+    state.snoozeUntil = snoozeEpochMs
+    state.tmTotal = timerTotalSeconds
+    val now = Clock.System.now().toEpochMilliseconds()
+    if (timerEndEpochMs > now) {
+        state.tmRunning = true
+        state.tmEndTs = timerEndEpochMs
+        state.tmRemaining = ((timerEndEpochMs - now) / 1000).toInt().coerceAtLeast(0)
+    } else {
+        state.tmRunning = false
+        state.tmEndTs = 0
+        state.tmRemaining = timerTotalSeconds
+    }
 }

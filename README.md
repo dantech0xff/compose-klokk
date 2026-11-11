@@ -191,6 +191,7 @@ English, `values-vi/` for Vietnamese. The app follows the platform locale.
 ## ☑️ Roadmap
 
 - [x] Persist alarms, cities, theme, screensaver, focus sessions, and Plus unlock across launches
+- [x] Android alarms and timers via AlarmManager. iOS schedules notifications. Desktop rings in the app.
 - [ ] Real billing integration for Klokk Plus
 - [ ] iOS/Android home-screen widgets (previews exist in Settings)
 - [ ] Tornado movement
