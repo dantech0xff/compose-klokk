@@ -67,6 +67,14 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test"))
         }
+        getByName("androidMain").dependencies {
+            implementation(libs.purchases.kmp)
+        }
+    }
+    if (HostManager.hostIsMac) {
+        sourceSets.getByName("iosMain").dependencies {
+            implementation(libs.purchases.kmp)
+        }
     }
 }
 

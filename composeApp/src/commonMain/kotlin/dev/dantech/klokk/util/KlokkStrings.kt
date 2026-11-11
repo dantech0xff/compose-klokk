@@ -199,13 +199,16 @@ fun planNote(plan: PlusPlan): String = stringResource(
 )
 
 @Composable
-fun planPrice(plan: PlusPlan): String = stringResource(
-    when (plan) {
-        PlusPlan.YEAR -> Res.string.price_yearly
-        PlusPlan.MONTH -> Res.string.price_monthly
-        PlusPlan.LIFE -> Res.string.price_lifetime
-    },
-)
+fun planPrice(plan: PlusPlan, storePrice: String? = null): String {
+    if (!storePrice.isNullOrBlank()) return storePrice
+    return stringResource(
+        when (plan) {
+            PlusPlan.YEAR -> Res.string.price_yearly
+            PlusPlan.MONTH -> Res.string.price_monthly
+            PlusPlan.LIFE -> Res.string.price_lifetime
+        },
+    )
+}
 
 @Composable
 fun planFineprint(plan: PlusPlan): String = stringResource(

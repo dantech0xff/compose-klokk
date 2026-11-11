@@ -18,6 +18,9 @@ kotlin {
 
 android {
     namespace = "dev.dantech.klokk"
+    buildFeatures {
+        buildConfig = true
+    }
     compileSdk {
         version = release(37) { minorApiLevel = 1 }
     }
@@ -27,6 +30,10 @@ android {
         targetSdk = 37
         versionCode = setting("KLOKK_VERSION_CODE")?.toInt() ?: 2
         versionName = setting("KLOKK_VERSION_NAME") ?: "1.0"
+        val revenueCatKey = (setting("REVENUECAT_ANDROID_KEY") ?: "")
+            .replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+        buildConfigField("String", "REVENUECAT_ANDROID_KEY", "\"$revenueCatKey\"")
     }
     val keystorePath = setting("KLOKK_KEYSTORE")
     val keystorePassword = setting("KLOKK_KEYSTORE_PASSWORD")

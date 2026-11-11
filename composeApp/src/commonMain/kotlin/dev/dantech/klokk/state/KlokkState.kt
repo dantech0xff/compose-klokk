@@ -20,6 +20,8 @@ enum class PaywallReason { CITIES, SHOW, WIDGETS, SETTINGS }
 
 enum class PlusPlan { YEAR, MONTH, LIFE }
 
+enum class PurchaseNotice { NONE, CANCELLED, PENDING, FAILED, UNAVAILABLE }
+
 /** Appearance preference; SYSTEM follows the platform dark/light setting. */
 @Serializable
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
@@ -98,6 +100,10 @@ class KlokkState {
     var plus by mutableStateOf(false)
     var plan by mutableStateOf(PlusPlan.YEAR)
     var buying by mutableStateOf(false)
+    var restoring by mutableStateOf(false)
+    var purchaseNotice by mutableStateOf(PurchaseNotice.NONE)
+    var purchaseDetail by mutableStateOf<String?>(null)
+    var storePrices by mutableStateOf<Map<PlusPlan, String>>(emptyMap())
     var pending: (() -> Unit)? = null
 
     var nowMs by mutableStateOf(kotlin.time.Clock.System.now().toEpochMilliseconds())
@@ -166,8 +172,17 @@ class KlokkState {
     }
 
     fun unlock() {
-        if (buying) return
+        if (buying || restoring) return
+        purchaseNotice = PurchaseNotice.NONE
+        purchaseDetail = null
         buying = true
+    }
+
+    fun restore() {
+        if (buying || restoring) return
+        purchaseNotice = PurchaseNotice.NONE
+        purchaseDetail = null
+        restoring = true
     }
 
     fun onUnlocked() {
@@ -175,8 +190,19 @@ class KlokkState {
         pending = null
         plus = true
         buying = false
+        restoring = false
+        purchaseNotice = PurchaseNotice.NONE
+        purchaseDetail = null
         paywall = null
         fn?.invoke()
+    }
+
+    fun onEntitlement(active: Boolean) {
+        if (active) {
+            if (!plus || pending != null) onUnlocked()
+        } else if (plus) {
+            plus = false
+        }
     }
 }
 

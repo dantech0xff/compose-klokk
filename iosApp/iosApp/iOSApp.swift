@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import UserNotifications
 import ComposeApp
 
@@ -12,7 +13,18 @@ import ComposeApp
 @main
 struct iOSApp: App {
     init() {
+        let raw = Bundle.main.object(forInfoDictionaryKey: "RevenueCatAPIKey") as? String ?? ""
+        IosRevenueCatKey.shared.value = raw
         KlokkAlarmCenter.shared.start()
+        NotificationCenter.default.addObserver(
+            forName: Notification.Name("KlokkOpenSubscriptions"),
+            object: nil,
+            queue: .main
+        ) { _ in
+            if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
+                UIApplication.shared.open(url)
+            }
+        }
     }
 
     var body: some Scene {

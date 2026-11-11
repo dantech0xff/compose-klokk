@@ -169,6 +169,11 @@
     <string name="cta_unlock_plus">Unlock Plus</string>
     <string name="cta_unlocking">Unlocking…</string>
     <string name="restore">Restore</string>
+    <string name="manage_subscription">Manage subscription</string>
+    <string name="purchase_cancelled">Purchase cancelled</string>
+    <string name="purchase_pending">Purchase pending</string>
+    <string name="purchase_unavailable">Purchases are not available in this build</string>
+    <string name="purchase_failed">Purchase failed</string>
     <string name="terms">Terms</string>
     <string name="privacy">Privacy</string>
 
