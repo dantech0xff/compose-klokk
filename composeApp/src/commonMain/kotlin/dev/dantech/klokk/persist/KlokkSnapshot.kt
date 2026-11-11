@@ -6,6 +6,7 @@ import dev.dantech.klokk.state.City
 import dev.dantech.klokk.state.DEFAULT_NEXT_ALARM_ID
 import dev.dantech.klokk.state.FocusSession
 import dev.dantech.klokk.state.KlokkState
+import dev.dantech.klokk.state.ClockStyle
 import dev.dantech.klokk.state.ThemeMode
 import dev.dantech.klokk.state.defaultAlarms
 import kotlin.time.Clock
@@ -25,6 +26,8 @@ data class KlokkSnapshot(
     val nextAlarmId: Int = DEFAULT_NEXT_ALARM_ID,
     val cities: List<City> = emptyList(),
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val clockStyle: ClockStyle = ClockStyle.FLAT,
+    val rippleDigits: Boolean = false,
     val saverShow: SaverShow = SaverShow.SHUFFLE,
     val focusSessions: List<FocusSession> = emptyList(),
     val plus: Boolean = false,
@@ -68,6 +71,8 @@ fun KlokkState.capture(): KlokkSnapshot = KlokkSnapshot(
     nextAlarmId = nextAlarmId,
     cities = cities.toList(),
     themeMode = themeMode,
+    clockStyle = clockStyle,
+    rippleDigits = rippleDigits,
     saverShow = saverShow,
     focusSessions = focusSessions.toList(),
     plus = plus,
@@ -83,6 +88,8 @@ fun KlokkSnapshot.applyTo(state: KlokkState) {
     state.cities.clear()
     state.cities.addAll(cities)
     state.themeMode = themeMode
+    state.clockStyle = clockStyle
+    state.rippleDigits = rippleDigits
     state.saverShow = saverShow
     state.focusSessions.clear()
     state.focusSessions.addAll(focusSessions)
