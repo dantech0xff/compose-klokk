@@ -36,6 +36,42 @@
             android:name=".alarm.KlokkAlarmReceiver"
             android:exported="false" />
         <receiver
+            android:name=".widget.KlokkSmallReceiver"
+            android:exported="true"
+            android:label="@string/widget_now">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/klokk_widget_small" />
+        </receiver>
+        <receiver
+            android:name=".widget.KlokkMediumReceiver"
+            android:exported="true"
+            android:label="@string/widget_time">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/klokk_widget_medium" />
+        </receiver>
+        <receiver
+            android:name=".widget.KlokkAlarmReceiverWidget"
+            android:exported="true"
+            android:label="@string/widget_next_alarm">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/klokk_widget_alarm" />
+        </receiver>
+        <receiver
+            android:name=".widget.WidgetTickReceiver"
+            android:exported="false" />
+        <receiver
             android:name=".alarm.KlokkRescheduleReceiver"
             android:exported="false">
             <intent-filter>

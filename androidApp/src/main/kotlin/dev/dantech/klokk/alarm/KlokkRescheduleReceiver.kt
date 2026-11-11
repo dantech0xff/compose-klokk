@@ -3,6 +3,7 @@ package dev.dantech.klokk.alarm
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import dev.dantech.klokk.widget.WidgetUpdates
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -20,6 +21,7 @@ class KlokkRescheduleReceiver : BroadcastReceiver() {
         scope.launch {
             try {
                 KlokkAlarmReceiver.reschedule(context)
+                if (WidgetUpdates.installed(context) > 0) WidgetUpdates.schedule(context)
             } finally {
                 pending.finish()
             }

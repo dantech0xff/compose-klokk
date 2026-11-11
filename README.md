@@ -193,7 +193,7 @@ English, `values-vi/` for Vietnamese. The app follows the platform locale.
 - [x] Persist alarms, cities, theme, screensaver, focus sessions, and Plus unlock across launches
 - [x] Android alarms and timers via AlarmManager. iOS schedules notifications. Desktop rings in the app.
 - [x] Klokk Plus billing through RevenueCat when a public SDK key is present. Desktop stays a mock.
-- [ ] iOS/Android home-screen widgets (previews exist in Settings)
+- [x] Android home-screen widgets for the clock and the next alarm, gated by Plus. iOS WidgetKit is not in the Xcode project yet.
 - [ ] Tornado movement
 - [ ] Background music
 - [ ] More alphabets for the Text movement
