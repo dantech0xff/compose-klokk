@@ -28,7 +28,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
@@ -51,6 +53,11 @@ import com.theapache64.klokk.persist.KlokkRepository
 import com.theapache64.klokk.persist.applyTo
 import com.theapache64.klokk.persist.capture
 import com.theapache64.klokk.persist.defaultKlokkRepository
+import com.theapache64.klokk.schedule.AlarmScheduler
+import com.theapache64.klokk.schedule.KlokkRuntime
+import com.theapache64.klokk.schedule.alarmScheduleHorizon
+import com.theapache64.klokk.schedule.defaultAlarmScheduler
+import com.theapache64.klokk.schedule.planWakes
 import com.theapache64.klokk.state.Alarm
 import com.theapache64.klokk.state.KlokkOverlay
 import com.theapache64.klokk.state.KlokkState
@@ -122,14 +129,37 @@ const val CLOCKS_CONTAINER_HEIGHT = CLOCK_SIZE * ROWS
 private val pageEasing = CubicBezierEasing(0.2f, 0.8f, 0.2f, 1f)
 
 @Composable
-fun App(repository: KlokkRepository = defaultKlokkRepository()) {
+fun App(
+    repository: KlokkRepository = defaultKlokkRepository(),
+    scheduler: AlarmScheduler = defaultAlarmScheduler(),
+) {
     val state = remember { KlokkState() }
+    val hydrated = remember { mutableStateOf(false) }
+
+    DisposableEffect(state) {
+        KlokkRuntime.state = state
+        onDispose {
+            if (KlokkRuntime.state === state) KlokkRuntime.state = null
+        }
+    }
 
     LaunchedEffect(repository) {
         repository.load().applyTo(state)
+        hydrated.value = true
         snapshotFlow { state.capture() }
             .distinctUntilChanged()
             .collect { repository.save(it) }
+    }
+
+    LaunchedEffect(scheduler, hydrated.value) {
+        if (!hydrated.value) return@LaunchedEffect
+        snapshotFlow {
+            planWakes(
+                state.capture(),
+                Instant.fromEpochMilliseconds(state.nowMs),
+                alarmScheduleHorizon(),
+            )
+        }.distinctUntilChanged().collect { scheduler.replaceAll(it) }
     }
 
     // One tick per wall-clock second; drives the clock face, timer and alarms.

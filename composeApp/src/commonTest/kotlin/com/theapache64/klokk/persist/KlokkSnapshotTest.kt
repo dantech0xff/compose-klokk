@@ -6,6 +6,7 @@ import com.theapache64.klokk.state.FocusSession
 import com.theapache64.klokk.state.KlokkState
 import com.theapache64.klokk.state.ThemeMode
 import com.theapache64.klokk.state.defaultAlarms
+import kotlin.time.Clock
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -56,19 +57,15 @@ class KlokkSnapshotTest {
     }
 
     @Test
-    fun applyAndCaptureDoNotTouchARunningTimer() {
-        val state = KlokkState().also {
-            it.tmRunning = true
-            it.tmRemaining = 12
-            it.tab = com.theapache64.klokk.state.KlokkTab.TIMERS
-        }
-        KlokkSnapshot(plus = true, themeMode = ThemeMode.DARK).applyTo(state)
+    fun applyRestoresARunningTimerAndLeavesTheOpenTabAlone() {
+        val end = Clock.System.now().toEpochMilliseconds() + 90_000
+        val state = KlokkState().also { it.tab = com.theapache64.klokk.state.KlokkTab.TIMERS }
+        KlokkSnapshot(plus = true, timerEndEpochMs = end, timerTotalSeconds = 300).applyTo(state)
         assertTrue(state.plus)
-        assertEquals(ThemeMode.DARK, state.themeMode)
         assertTrue(state.tmRunning)
-        assertEquals(12, state.tmRemaining)
+        assertEquals(end, state.tmEndTs)
         assertEquals(com.theapache64.klokk.state.KlokkTab.TIMERS, state.tab)
-        assertTrue(state.capture().plus)
+        assertEquals(end, state.capture().timerEndEpochMs)
     }
 
     @Test
