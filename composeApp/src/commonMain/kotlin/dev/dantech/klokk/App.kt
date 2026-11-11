@@ -106,6 +106,7 @@ import dev.dantech.klokk.generated.resources.ring_timer
 import dev.dantech.klokk.ui.tap
 import dev.dantech.klokk.util.KlokkFormat
 import dev.dantech.klokk.util.KlokkFormat.NextAlarm
+import dev.dantech.klokk.widget.refreshHomeWidgets
 import dev.dantech.klokk.util.dateLine
 import dev.dantech.klokk.util.relTime
 import dev.dantech.klokk.util.tabLabel
@@ -214,6 +215,10 @@ fun App(
     LaunchedEffect(purchases) {
         state.storePrices = purchases.loadPrices()
         purchases.listen { active -> state.onEntitlement(active) }
+    }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { state.plus }.distinctUntilChanged().collect { refreshHomeWidgets() }
     }
 
     LaunchedEffect(state.buying) {

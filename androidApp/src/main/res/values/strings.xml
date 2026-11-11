@@ -5,4 +5,10 @@
     <string name="alarm_timer">Timer</string>
     <string name="alarm_snooze">Snooze</string>
     <string name="alarm_dismiss">Dismiss</string>
+    <string name="widget_now">Now</string>
+    <string name="widget_time">Time</string>
+    <string name="widget_next_alarm">Next alarm</string>
+    <string name="widget_next_alarm_pill">NEXT ALARM</string>
+    <string name="widget_no_alarm">No alarm</string>
+    <string name="widget_plus">Klokk Plus</string>
 </resources>

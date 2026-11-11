@@ -6,4 +6,10 @@
     <string name="alarm_timer">Hết giờ</string>
     <string name="alarm_snooze">Báo lại</string>
     <string name="alarm_dismiss">Tắt</string>
+    <string name="widget_now">Hiện tại</string>
+    <string name="widget_time">Giờ</string>
+    <string name="widget_next_alarm">Báo thức kế</string>
+    <string name="widget_next_alarm_pill">BÁO THỨC KẾ</string>
+    <string name="widget_no_alarm">Không có báo thức</string>
+    <string name="widget_plus">Klokk Plus</string>
 </resources>
