@@ -187,4 +187,11 @@
     <string name="appearance_system">Auto</string>
     <string name="appearance_light">Light</string>
     <string name="appearance_dark">Dark</string>
+    <string name="clock_style">Clock style</string>
+    <string name="clock_style_flat">Flat</string>
+    <string name="clock_style_neon">Neon</string>
+    <string name="clock_style_hands">Hands</string>
+    <string name="clock_style_hint">Neon keeps a dark field so the glow stays readable.</string>
+    <string name="clock_ripple">Ripple</string>
+    <string name="clock_ripple_hint">Digit changes spread from the center. The seconds sweep stays together.</string>
 </resources>

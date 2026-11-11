@@ -18,11 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.dantech.klokk.composable.KlokkCell
 import dev.dantech.klokk.composable.KlokkGrid
+import dev.dantech.klokk.state.ClockStyle
 import dev.dantech.klokk.state.KlokkSheet
 import dev.dantech.klokk.state.KlokkState
 import dev.dantech.klokk.state.PaywallReason
@@ -43,6 +45,13 @@ import dev.dantech.klokk.generated.resources.appearance
 import dev.dantech.klokk.generated.resources.appearance_dark
 import dev.dantech.klokk.generated.resources.appearance_light
 import dev.dantech.klokk.generated.resources.appearance_system
+import dev.dantech.klokk.generated.resources.clock_ripple
+import dev.dantech.klokk.generated.resources.clock_ripple_hint
+import dev.dantech.klokk.generated.resources.clock_style
+import dev.dantech.klokk.generated.resources.clock_style_flat
+import dev.dantech.klokk.generated.resources.clock_style_hands
+import dev.dantech.klokk.generated.resources.clock_style_hint
+import dev.dantech.klokk.generated.resources.clock_style_neon
 import dev.dantech.klokk.generated.resources.included_plus
 import dev.dantech.klokk.generated.resources.plus_badge
 import dev.dantech.klokk.generated.resources.plus_card_sub
@@ -121,6 +130,73 @@ fun SettingsTab(
                     )
                 }
             }
+        }
+
+        Text(
+            stringResource(Res.string.clock_style),
+            color = KlokkTextPrimary,
+            fontSize = 17.sp,
+            modifier = Modifier.padding(top = 10.dp),
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .clip(RoundedCornerShape(18.dp))
+                .background(KlokkField)
+                .padding(2.dp),
+        ) {
+            ClockStyle.entries.forEach { style ->
+                val selected = state.clockStyle == style
+                Text(
+                    when (style) {
+                        ClockStyle.FLAT -> stringResource(Res.string.clock_style_flat)
+                        ClockStyle.NEON -> stringResource(Res.string.clock_style_neon)
+                        ClockStyle.HANDS -> stringResource(Res.string.clock_style_hands)
+                    },
+                    color = if (selected) KlokkOnPrimary else KlokkTextSecondary,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(if (selected) KlokkTextPrimary else Color.Transparent)
+                        .tap { state.clockStyle = style }
+                        .padding(vertical = 6.dp),
+                )
+            }
+        }
+        Text(
+            stringResource(Res.string.clock_style_hint),
+            color = KlokkTextSecondary,
+            fontSize = 13.sp,
+            lineHeight = 18.sp,
+            modifier = Modifier.padding(top = 6.dp),
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
+                Text(
+                    stringResource(Res.string.clock_ripple),
+                    color = KlokkTextPrimary,
+                    fontSize = 17.sp,
+                )
+                Text(
+                    stringResource(Res.string.clock_ripple_hint),
+                    color = KlokkTextSecondary,
+                    fontSize = 13.sp,
+                    lineHeight = 18.sp,
+                )
+            }
+            KlokkToggle(
+                checked = state.rippleDigits,
+                onToggle = { state.rippleDigits = !state.rippleDigits },
+            )
         }
 
         if (!plus) {
