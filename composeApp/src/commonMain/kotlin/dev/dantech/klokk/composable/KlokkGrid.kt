@@ -4,20 +4,23 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import dev.dantech.klokk.state.ClockStyle
 import dev.dantech.klokk.theme.LocalKlokkColors
 import kotlinx.coroutines.launch
 import kotlin.math.PI
@@ -49,6 +52,14 @@ object KlokkCellMode {
     const val SNAP = 2
 }
 
+val LocalClockStyle = compositionLocalOf { ClockStyle.FLAT }
+val LocalClockRipple = compositionLocalOf { false }
+
+private val NeonField = Color(0xFF05060A)
+private val NeonCore = Color(0xFFF7FEFF)
+private val NeonMid = Color(0xFF9AEEFF)
+private val NeonHalo = Color(0xFF3AD4FF)
+
 /**
  * Dumb grid of two-hand clocks, fed by a rows×cols [matrix].
  */
@@ -59,14 +70,24 @@ fun KlokkGrid(
     dim: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
-        for (row in matrix) {
+    val style = LocalClockStyle.current
+    val ripple = LocalClockRipple.current
+    val rows = matrix.size
+    val gridModifier = if (style == ClockStyle.NEON) modifier.background(NeonField) else modifier
+    Column(modifier = gridModifier) {
+        matrix.forEachIndexed { rowIndex, row ->
             Row {
-                for (cell in row) {
+                row.forEachIndexed { colIndex, cell ->
                     KlokkCellView(
                         cell = cell,
                         dim = dim,
-                        modifier = Modifier.requiredSize(clockSize)
+                        row = rowIndex,
+                        col = colIndex,
+                        rows = rows,
+                        cols = row.size,
+                        style = style,
+                        ripple = ripple,
+                        modifier = Modifier.requiredSize(clockSize),
                     )
                 }
             }
@@ -78,30 +99,28 @@ fun KlokkGrid(
 private fun KlokkCellView(
     cell: KlokkCell,
     dim: Boolean,
+    row: Int,
+    col: Int,
+    rows: Int,
+    cols: Int,
+    style: ClockStyle,
+    ripple: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val handOne = remember { Animatable(0f) }
     val handTwo = remember { Animatable(0f) }
+    val delay = cellRippleDelayMs(row, col, rows, cols, ripple, cell.isBackground)
 
-    LaunchedEffect(cell) {
+    LaunchedEffect(cell, delay) {
         val targetOne = handTarget(handOne.value, cell.degreeOne, cell.mode)
         val targetTwo = handTarget(handTwo.value, cell.degreeTwo, cell.mode)
         if (cell.mode == KlokkCellMode.SNAP) {
             launch { handOne.snapTo(targetOne) }
             launch { handTwo.snapTo(targetTwo) }
         } else {
-            launch {
-                handOne.animateTo(
-                    targetOne,
-                    animationSpec = tween(durationMillis = cell.durationMs, easing = LinearEasing)
-                )
-            }
-            launch {
-                handTwo.animateTo(
-                    targetTwo,
-                    animationSpec = tween(durationMillis = cell.durationMs, easing = LinearEasing)
-                )
-            }
+            val spec = tween<Float>(durationMillis = cell.durationMs, delayMillis = delay, easing = LinearEasing)
+            launch { handOne.animateTo(targetOne, animationSpec = spec) }
+            launch { handTwo.animateTo(targetTwo, animationSpec = spec) }
         }
     }
 
@@ -116,38 +135,50 @@ private fun KlokkCellView(
     Canvas(modifier = modifier) {
         val needleWidth = size.minDimension * 0.05f
         val radius = size.minDimension / 2f
-
-        drawCircle(color = faceColor, radius = radius)
-
-        val radius2 = (radius - needleWidth / 2f) * 0.98f
-        val style = Stroke(width = needleWidth, cap = StrokeCap.Round)
-
-        val radOne = handOne.value * PI / 180
-        drawLine(
-            color = handColor,
-            start = center,
-            end = Offset(
-                x = center.x + radius2 * sin(radOne).toFloat(),
-                y = center.y - radius2 * cos(radOne).toFloat(),
-            ),
-            alpha = handAlpha,
-            strokeWidth = style.width,
-            cap = StrokeCap.Round,
-        )
-
-        val radTwo = handTwo.value * PI / 180
-        drawLine(
-            color = handColor,
-            start = center,
-            end = Offset(
-                x = center.x + radius2 * sin(radTwo).toFloat(),
-                y = center.y - radius2 * cos(radTwo).toFloat(),
-            ),
-            alpha = handAlpha,
-            strokeWidth = style.width,
-            cap = StrokeCap.Round,
-        )
+        val length = (radius - needleWidth / 2f) * 0.98f
+        when (style) {
+            ClockStyle.FLAT -> {
+                drawCircle(color = faceColor, radius = radius)
+                drawHand(handColor, handOne.value, length, needleWidth, handAlpha)
+                drawHand(handColor, handTwo.value, length, needleWidth, handAlpha)
+            }
+            ClockStyle.HANDS -> {
+                drawHand(handColor, handOne.value, length, needleWidth, handAlpha)
+                drawHand(handColor, handTwo.value, length, needleWidth, handAlpha)
+            }
+            ClockStyle.NEON -> {
+                drawGlowHand(handOne.value, length, needleWidth, handAlpha)
+                drawGlowHand(handTwo.value, length, needleWidth, handAlpha)
+            }
+        }
     }
+}
+
+private fun DrawScope.drawGlowHand(angleDeg: Float, length: Float, width: Float, alpha: Float) {
+    drawHand(NeonHalo, angleDeg, length, width * 3.2f, 0.20f * alpha)
+    drawHand(NeonMid, angleDeg, length, width * 1.65f, 0.45f * alpha)
+    drawHand(NeonCore, angleDeg, length, width, alpha)
+}
+
+private fun DrawScope.drawHand(
+    color: Color,
+    angleDeg: Float,
+    length: Float,
+    width: Float,
+    alpha: Float,
+) {
+    val rad = angleDeg * PI / 180.0
+    drawLine(
+        color = color,
+        start = center,
+        end = Offset(
+            x = center.x + (length * sin(rad)).toFloat(),
+            y = center.y - (length * cos(rad)).toFloat(),
+        ),
+        alpha = alpha,
+        strokeWidth = width,
+        cap = StrokeCap.Round,
+    )
 }
 
 private fun handTarget(current: Float, degree: Float, mode: Int): Float {

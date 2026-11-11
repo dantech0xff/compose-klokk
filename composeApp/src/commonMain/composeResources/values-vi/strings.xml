@@ -187,4 +187,11 @@
     <string name="appearance_system">Tự động</string>
     <string name="appearance_light">Sáng</string>
     <string name="appearance_dark">Tối</string>
+    <string name="clock_style">Kiểu đồng hồ</string>
+    <string name="clock_style_flat">Phẳng</string>
+    <string name="clock_style_neon">Neon</string>
+    <string name="clock_style_hands">Kim</string>
+    <string name="clock_style_hint">Neon dùng nền tối để vầng sáng vẫn đọc được.</string>
+    <string name="clock_ripple">Gợn sóng</string>
+    <string name="clock_ripple_hint">Số đổi tỏa từ tâm. Kim giây vẫn chuyển cùng lúc.</string>
 </resources>
