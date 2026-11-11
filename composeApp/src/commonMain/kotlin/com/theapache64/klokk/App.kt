@@ -31,6 +31,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -46,6 +47,10 @@ import com.theapache64.klokk.composable.KlokkCellMode
 import com.theapache64.klokk.composable.KlokkGrid
 import com.theapache64.klokk.movement.KlokkMatrices
 import com.theapache64.klokk.movement.SaverShow
+import com.theapache64.klokk.persist.KlokkRepository
+import com.theapache64.klokk.persist.applyTo
+import com.theapache64.klokk.persist.capture
+import com.theapache64.klokk.persist.defaultKlokkRepository
 import com.theapache64.klokk.state.Alarm
 import com.theapache64.klokk.state.KlokkOverlay
 import com.theapache64.klokk.state.KlokkState
@@ -101,6 +106,7 @@ import kotlin.math.roundToInt
 import kotlin.time.Clock
 import kotlin.time.Instant
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -116,8 +122,15 @@ const val CLOCKS_CONTAINER_HEIGHT = CLOCK_SIZE * ROWS
 private val pageEasing = CubicBezierEasing(0.2f, 0.8f, 0.2f, 1f)
 
 @Composable
-fun App() {
+fun App(repository: KlokkRepository = defaultKlokkRepository()) {
     val state = remember { KlokkState() }
+
+    LaunchedEffect(repository) {
+        repository.load().applyTo(state)
+        snapshotFlow { state.capture() }
+            .distinctUntilChanged()
+            .collect { repository.save(it) }
+    }
 
     // One tick per wall-clock second; drives the clock face, timer and alarms.
     LaunchedEffect(Unit) {

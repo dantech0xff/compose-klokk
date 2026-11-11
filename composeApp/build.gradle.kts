@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.androidMultiplatformLibrary)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -53,6 +54,9 @@ kotlin {
             implementation(libs.components.resources)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.datastore.core)
+            implementation(libs.datastore.preferences)
         }
         val desktopMain by getting {
             dependencies {

@@ -190,7 +190,7 @@ English, `values-vi/` for Vietnamese. The app follows the platform locale.
 
 ## ☑️ Roadmap
 
-- [ ] Persist alarms, cities and Plus unlock across launches
+- [x] Persist alarms, cities, theme, screensaver, focus sessions, and Plus unlock across launches
 - [ ] Real billing integration for Klokk Plus
 - [ ] iOS/Android home-screen widgets (previews exist in Settings)
 - [ ] Tornado movement

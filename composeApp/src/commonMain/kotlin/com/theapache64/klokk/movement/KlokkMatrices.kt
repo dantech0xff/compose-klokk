@@ -12,6 +12,7 @@ import com.theapache64.klokk.movement.snake.WaveMatrixGenerator
 /**
  * Which choreography the screensaver plays.
  */
+@kotlinx.serialization.Serializable
 enum class SaverShow {
     SHUFFLE,
     RIPPLE,

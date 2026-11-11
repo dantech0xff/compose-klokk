@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.theapache64.klokk.movement.SaverShow
+import kotlinx.serialization.Serializable
 
 enum class KlokkTab { CLOCK, ALARM, TIMERS, FOCUS, SETTINGS }
 
@@ -20,9 +21,11 @@ enum class PaywallReason { CITIES, SHOW, WIDGETS, SETTINGS }
 enum class PlusPlan { YEAR, MONTH, LIFE }
 
 /** Appearance preference; SYSTEM follows the platform dark/light setting. */
+@Serializable
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
 
 /** [days] is Sunday-first (index 0 = Sunday) like Date.getDay(). */
+@Serializable
 data class Alarm(
     val id: Int,
     val h: Int,
@@ -32,9 +35,18 @@ data class Alarm(
     val on: Boolean,
 )
 
+@Serializable
 data class City(val name: String, val tz: String)
 
+@Serializable
 data class FocusSession(val startMs: Long, val ms: Long)
+
+fun defaultAlarms(): List<Alarm> = listOf(
+    Alarm(1, 7, 0, "", listOf(false, true, true, true, true, true, false), true),
+    Alarm(2, 9, 30, "Slow morning", listOf(true, false, false, false, false, false, true), false),
+)
+
+const val DEFAULT_NEXT_ALARM_ID = 3
 
 /**
  * All app state for the redesign. Timing-driven side effects
@@ -55,12 +67,9 @@ class KlokkState {
     var overlayTs = 0L
 
     // alarms
-    val alarms = mutableStateListOf(
-        Alarm(1, 7, 0, "", listOf(false, true, true, true, true, true, false), true),
-        Alarm(2, 9, 30, "Slow morning", listOf(true, false, false, false, false, false, true), false),
-    )
+    val alarms = mutableStateListOf<Alarm>().apply { addAll(defaultAlarms()) }
     var editingId by mutableStateOf<Int?>(null)
-    var nextAlarmId = 3
+    var nextAlarmId = DEFAULT_NEXT_ALARM_ID
     /** alarm id -> epoch minute it last rang at; suppresses only that occurrence. */
     val rungAlarmMinutes = mutableMapOf<Int, Long>()
 
