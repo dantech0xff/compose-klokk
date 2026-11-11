@@ -162,7 +162,7 @@ on macOS (`iosApp`).
   or headless: `xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp
   -destination 'platform=iOS Simulator,name=iPhone 17' build`, then
   `xcrun simctl install booted <Klokk.app>` / `xcrun simctl launch booted
-  com.theapache64.klokk`
+  dev.dantech.klokk`
 
 ## 📂 Project structure
 
@@ -232,6 +232,7 @@ Give a ⭐️ if this project helped you!
 
 ```
 Copyright © 2021 - theapache64
+Copyright © 2026 - Dan Tech
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

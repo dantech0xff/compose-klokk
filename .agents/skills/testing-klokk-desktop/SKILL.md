@@ -11,8 +11,8 @@ cd /Users/devin/repos/compose-klokk && unset DISPLAY && nohup ./gradlew :compose
 ```
 - `unset DISPLAY` is REQUIRED even on macOS — the Gradle daemon env can leak a stale DISPLAY into the JVM and make AWT headless (window never appears).
 - `:composeApp:desktopRun` fails ("No main class"); use `:composeApp:run`.
-- First build ~30-60s. Check `pgrep -f "com.theapache64.klokk"` and tail the log for `:composeApp:run`.
-- Kill/restart for fresh state (state is in-memory only): `pkill -f "com.theapache64.klokk"`. Fresh state = plus=false, 0 cities, default alarms, Clock tab — REQUIRED to test paywall gating (any purchase makes the rest of the session Plus).
+- First build ~30-60s. Check `pgrep -f "dev.dantech.klokk"` and tail the log for `:composeApp:run`.
+- Kill/restart for fresh state (state is in-memory only): `pkill -f "dev.dantech.klokk"`. Fresh state = plus=false, 0 cities, default alarms, Clock tab — REQUIRED to test paywall gating (any purchase makes the rest of the session Plus).
 - Timezone-dependent behavior (night dimming 22:00-06:00, next-alarm captions): launch with `TZ=<zone>` to fake another local time — the app reads `TimeZone.currentSystemDefault()` from the JVM which honors TZ.
 
 ## Window geometry (macOS VM, 1024x768 tool coords)
