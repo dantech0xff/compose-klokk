@@ -12,29 +12,39 @@ jobs:
   desktop-test:
     name: Desktop tests
     runs-on: ubuntu-latest
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
-      - uses: android-actions/setup-android@v3
       - name: Install the Android SDK the shared module configures
-        run: sdkmanager --install "platforms;android-37.1" "build-tools;37.0.0"
+        run: |
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/cmdline-tools/16.0/bin:$PATH"
+          yes | sdkmanager --licenses >/dev/null
+          sdkmanager --install "platforms;android-37.1" "build-tools;37.0.0"
       - name: Run desktop and common tests
         run: ./gradlew :composeApp:desktopTest --stacktrace
 
   android:
     name: Android assembleDebug and lint
     runs-on: ubuntu-latest
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
-      - uses: android-actions/setup-android@v3
       - name: Install the Android SDK
-        run: sdkmanager --install "platforms;android-37.1" "build-tools;37.0.0"
+        run: |
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/cmdline-tools/16.0/bin:$PATH"
+          yes | sdkmanager --licenses >/dev/null
+          sdkmanager --install "platforms;android-37.1" "build-tools;37.0.0"
       - name: Assemble debug and lint
         run: ./gradlew :androidApp:assembleDebug :androidApp:lint --stacktrace
