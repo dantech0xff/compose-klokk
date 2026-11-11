@@ -549,20 +549,8 @@ private fun onSecond(state: KlokkState, nowMs: Long) {
 
     val tz = TimeZone.currentSystemDefault()
     val local = Instant.fromEpochMilliseconds(nowMs).toLocalDateTime(tz)
-    val day = (local.dayOfWeek.ordinal + 1) % 7
     val hit = state.alarms.firstOrNull { alarm ->
-        alarm.on &&
-            alarm.h == local.hour &&
-            alarm.m == local.minute &&
-            // Suppress only each alarm's already-rung occurrence (per-id
-            // epoch minute) so co-minute alarms queue once each and the
-            // same alarm may fire again on its next scheduled day.
-            state.rungAlarmMinutes[alarm.id] != nowMs / 60_000 &&
-            // Alarm instants fall within the same minute as local; the
-            // (minute, h) match survives a skipped :00 tick — we just also
-            // skip alarms already rung for this occurrence.
-            local.second < 30 &&
-            (alarm.days.none { it } || alarm.days.getOrElse(day) { false })
+        KlokkFormat.firesThisMinute(alarm, local, nowMs, state.rungAlarmMinutes[alarm.id])
     }
     if (hit != null) {
         if (hit.days.none { it }) {
