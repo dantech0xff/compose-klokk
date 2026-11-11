@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  desktop-test:
+    name: Desktop tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: android-actions/setup-android@v3
+      - name: Install the Android SDK the shared module configures
+        run: sdkmanager --install "platforms;android-37.1" "build-tools;37.0.0"
+      - name: Run desktop and common tests
+        run: ./gradlew :composeApp:desktopTest --stacktrace
+
+  android:
+    name: Android assembleDebug and lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: android-actions/setup-android@v3
+      - name: Install the Android SDK
+        run: sdkmanager --install "platforms;android-37.1" "build-tools;37.0.0"
+      - name: Assemble debug and lint
+        run: ./gradlew :androidApp:assembleDebug :androidApp:lint --stacktrace

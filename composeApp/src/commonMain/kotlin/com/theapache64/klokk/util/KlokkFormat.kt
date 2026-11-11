@@ -104,6 +104,28 @@ object KlokkFormat {
         return best
     }
 
+    /**
+     * True when [alarm] should start ringing at [local].
+     *
+     * [lastRungEpochMinute] is the epoch minute this alarm already rang, so the
+     * same occurrence does not ring twice. The second half of the minute is
+     * ignored so a late tick cannot double-fire, while a missed :00 tick in
+     * the first 30 seconds still matches.
+     */
+    fun firesThisMinute(
+        alarm: Alarm,
+        local: LocalDateTime,
+        nowMs: Long,
+        lastRungEpochMinute: Long?,
+    ): Boolean {
+        if (!alarm.on) return false
+        if (alarm.h != local.hour || alarm.m != local.minute) return false
+        if (local.second >= 30) return false
+        if (lastRungEpochMinute == nowMs / 60_000) return false
+        val day = dayIndex(local)
+        return alarm.days.none { it } || alarm.days.getOrElse(day) { false }
+    }
+
     /** Localized "in 2d 3h" / "in 7h 20m" / "in 45m"; args are templates. */
     fun relTime(
         ms: Long,

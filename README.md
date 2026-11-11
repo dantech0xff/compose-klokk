@@ -153,8 +153,10 @@ Prerequisites: JDK 17+, and per platform — Android SDK (`androidApp`) or Xcode
 on macOS (`iosApp`).
 
 - **Desktop**: `./gradlew :composeApp:run`
+- **Tests**: `./gradlew :composeApp:desktopTest` (common and desktop)
 - **Android**: `./gradlew :androidApp:installDebug` with an emulator/device
-  connected
+  connected. `./gradlew :androidApp:assembleDebug :androidApp:lint` is the
+  same pair the CI workflow runs.
 - **iOS**: open `iosApp/iosApp.xcodeproj` in Xcode on macOS and run
   (`iosArm64`/`iosSimulatorArm64` targets are enabled only on macOS hosts),
   or headless: `xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp

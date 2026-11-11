@@ -150,5 +150,11 @@ gradle-app.setting
 **/build/
 
 # End of https://www.toptal.com/developers/gitignore/api/kotlin,intellij,gradle
+
+# Machine-local Android SDK path. CI sets ANDROID_HOME instead.
+local.properties
+
+# Kotlin compiler session cache
+.kotlin/
 build
 gpm.json
