@@ -12,7 +12,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.theapache64.klokk.composeapp"
+        namespace = "dev.dantech.klokk.composeapp"
         compileSdk {
             version = release(37) { minorApiLevel = 1 }
         }
@@ -71,12 +71,12 @@ kotlin {
 }
 
 compose.resources {
-    packageOfResClass = "com.theapache64.klokk.generated.resources"
+    packageOfResClass = "dev.dantech.klokk.generated.resources"
 }
 
 compose.desktop {
     application {
-        mainClass = "com.theapache64.klokk.MainKt"
+        mainClass = "dev.dantech.klokk.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)

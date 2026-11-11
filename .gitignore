@@ -154,6 +154,10 @@ gradle-app.setting
 # Machine-local Android SDK path. CI sets ANDROID_HOME instead.
 local.properties
 
+# Release keystore. Dan supplies this outside the repo. See docs/signing.md.
+*.jks
+*.keystore
+
 # Kotlin compiler session cache
 .kotlin/
 build
